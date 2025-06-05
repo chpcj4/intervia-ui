@@ -2,6 +2,8 @@
 import React from "react"
 import LoginPage from "./components/LoginPage"
 import AdminEvaluationPage from "./components/AdminEvaluationPage"
+import KeywordManagementPage from "./components/KeywordManagementPage"
+import ReportManagementPage from "./components/ReportManagementPage"
 
 function App() {
   return (
@@ -15,7 +17,7 @@ function App() {
         backgroundColor: "#0052CC", // 파란 배경 고정
       }}
     >
-      <AdminEvaluationPage />
+      <ReportManagementPage />
     </div>
   )
 }

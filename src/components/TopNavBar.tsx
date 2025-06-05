@@ -1,9 +1,8 @@
 import { AppBar, Box, Toolbar, Typography, Button, Avatar, Chip, IconButton, Menu, MenuItem } from "@mui/material"
 import { useState } from 'react';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
-import SettingsIcon from '@mui/icons-material/Settings';
 
 const TopNavBar = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -23,38 +22,32 @@ const TopNavBar = () => {
       sx={{
         bgcolor: 'white',
         borderBottom: '1px solid #e2e8f0',
-        boxShadow: '0 1px 3px 0 rgb(0 0 0 / 0.1)'
+        boxShadow: 'none',
+        height: 64
       }}
     >
-      <Toolbar sx={{ justifyContent: "space-between", py: 1 }}>
-        {/* 로고 및 네비게이션 */}
-        <Box display="flex" alignItems="center" gap={4}>
-          {/* 로고 */}
+      <Toolbar sx={{ justifyContent: "space-between", py: 0, minHeight: '64px !important' }}>
+        {/* 좌측 로고 및 네비게이션 */}
+        <Box display="flex" alignItems="center" gap={3}>
+          {/* 메뉴 버튼과 로고 */}
           <Box display="flex" alignItems="center" gap={2}>
-            <Box
+            <IconButton
               sx={{
-                width: 40,
-                height: 40,
-                bgcolor: '#3b82f6',
-                borderRadius: 2,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
+                color: '#9fa1a0',
+                p: 1.5
               }}
             >
-              <Typography variant="h6" fontWeight="700" color="white">
-                I
-              </Typography>
-            </Box>
+              <MenuIcon />
+            </IconButton>
+            
+            {/* INTERVIA 로고 */}
             <Typography 
               variant="h5" 
-              fontWeight="800" 
+              fontWeight="700" 
               sx={{
-                background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                letterSpacing: '-0.025em'
+                color: '#0b57d0',
+                letterSpacing: '-0.025em',
+                fontSize: '1.5rem'
               }}
             >
               INTERVIA
@@ -62,18 +55,19 @@ const TopNavBar = () => {
           </Box>
           
           {/* 네비게이션 메뉴 */}
-          <Box display="flex" gap={1}>
+          <Box display="flex" gap={0} ml={8}>
             <Button 
               sx={{ 
-                color: '#64748b',
-                fontWeight: 500,
+                color: '#9fa1a0',
+                fontWeight: 700,
+                fontSize: '1.125rem',
                 px: 3,
-                py: 1,
-                borderRadius: 2,
+                py: 2,
                 textTransform: 'none',
+                minHeight: 64,
                 '&:hover': {
-                  bgcolor: '#f1f5f9',
-                  color: '#334155'
+                  bgcolor: 'transparent',
+                  color: '#0b57d0'
                 }
               }}
             >
@@ -81,18 +75,26 @@ const TopNavBar = () => {
             </Button>
             <Button 
               sx={{ 
-                color: 'white',
-                bgcolor: '#3b82f6',
-                fontWeight: 600,
+                color: '#0b57d0',
+                fontWeight: 700,
+                fontSize: '1.125rem',
                 px: 3,
-                py: 1,
-                borderRadius: 2,
+                py: 2,
                 textTransform: 'none',
-                boxShadow: '0 4px 6px -1px rgb(59 130 246 / 0.25)',
+                minHeight: 64,
+                position: 'relative',
                 '&:hover': {
-                  bgcolor: '#2563eb',
-                  transform: 'translateY(-1px)',
-                  boxShadow: '0 8px 15px -3px rgb(59 130 246 / 0.3)'
+                  bgcolor: 'transparent'
+                },
+                '&::after': {
+                  content: '""',
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: '3px',
+                  bgcolor: '#0b57d0',
+                  borderRadius: '3px 3px 0 0'
                 }
               }}
             >
@@ -100,15 +102,16 @@ const TopNavBar = () => {
             </Button>
             <Button 
               sx={{ 
-                color: '#64748b',
-                fontWeight: 500,
+                color: '#9fa1a0',
+                fontWeight: 700,
+                fontSize: '1.125rem',
                 px: 3,
-                py: 1,
-                borderRadius: 2,
+                py: 2,
                 textTransform: 'none',
+                minHeight: 64,
                 '&:hover': {
-                  bgcolor: '#f1f5f9',
-                  color: '#334155'
+                  bgcolor: 'transparent',
+                  color: '#0b57d0'
                 }
               }}
             >
@@ -116,15 +119,16 @@ const TopNavBar = () => {
             </Button>
             <Button 
               sx={{ 
-                color: '#64748b',
-                fontWeight: 500,
+                color: '#9fa1a0',
+                fontWeight: 700,
+                fontSize: '1.125rem',
                 px: 3,
-                py: 1,
-                borderRadius: 2,
+                py: 2,
                 textTransform: 'none',
+                minHeight: 64,
                 '&:hover': {
-                  bgcolor: '#f1f5f9',
-                  color: '#334155'
+                  bgcolor: 'transparent',
+                  color: '#0b57d0'
                 }
               }}
             >
@@ -135,136 +139,59 @@ const TopNavBar = () => {
 
         {/* 우측 사용자 영역 */}
         <Box display="flex" alignItems="center" gap={2}>
-          {/* 알림 버튼 */}
-          <IconButton
+          {/* Admin 태그와 로그아웃 버튼 */}
+          <Button
             sx={{
-              bgcolor: '#f8fafc',
-              border: '1px solid #e2e8f0',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1,
+              bgcolor: '#0b57d0',
+              color: 'white',
+              borderRadius: '18px',
+              px: 1,
+              py: 0.5,
+              textTransform: 'none',
+              fontWeight: 700,
+              fontSize: '1rem',
+              height: 30,
+              minWidth: 'auto',
               '&:hover': {
-                bgcolor: '#f1f5f9',
-                borderColor: '#cbd5e1'
+                bgcolor: '#0945a3'
               }
             }}
           >
-            <NotificationsIcon fontSize="small" sx={{ color: '#64748b' }} />
-          </IconButton>
+            <Avatar 
+              sx={{ 
+                width: 24, 
+                height: 24,
+                bgcolor: '#e5e8ea',
+                fontSize: '0.75rem',
+                fontWeight: 600
+              }}
+            >
+              <AccountCircleIcon sx={{ color: '#c3c4c3', fontSize: '1rem' }} />
+            </Avatar>
+            Admin
+          </Button>
 
-          {/* 설정 버튼 */}
-          <IconButton
+          <Button
             sx={{
-              bgcolor: '#f8fafc',
-              border: '1px solid #e2e8f0',
+              color: '#9fa1a0',
+              borderRadius: '18px',
+              px: 2,
+              py: 0.5,
+              textTransform: 'none',
+              fontWeight: 700,
+              fontSize: '1rem',
+              height: 30,
               '&:hover': {
                 bgcolor: '#f1f5f9',
-                borderColor: '#cbd5e1'
+                color: '#374151'
               }
             }}
           >
-            <SettingsIcon fontSize="small" sx={{ color: '#64748b' }} />
-          </IconButton>
-
-          {/* 구분선 */}
-          <Box sx={{ width: 1, height: 32, bgcolor: '#e2e8f0', mx: 1 }} />
-
-          {/* 사용자 정보 */}
-          <Box display="flex" alignItems="center" gap={2}>
-            <Chip
-              label="Admin"
-              size="small"
-              sx={{
-                bgcolor: '#dcfce7',
-                color: '#166534',
-                fontWeight: 600,
-                border: '1px solid #bbf7d0'
-              }}
-            />
-            
-            <Button
-              onClick={handleUserMenuClick}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-                color: '#334155',
-                textTransform: 'none',
-                fontWeight: 500,
-                px: 2,
-                py: 1,
-                borderRadius: 2,
-                border: '1px solid #e2e8f0',
-                '&:hover': {
-                  bgcolor: '#f8fafc',
-                  borderColor: '#cbd5e1'
-                }
-              }}
-            >
-              <Avatar 
-                sx={{ 
-                  width: 32, 
-                  height: 32,
-                  bgcolor: '#3b82f6',
-                  fontSize: '0.875rem',
-                  fontWeight: 600
-                }}
-              >
-                A
-              </Avatar>
-              <Box textAlign="left">
-                <Typography variant="body2" fontWeight="600" color="#334155">
-                  관리자
-                </Typography>
-                <Typography variant="caption" color="#64748b">
-                  admin@intervia.com
-                </Typography>
-              </Box>
-            </Button>
-
-            {/* 사용자 메뉴 */}
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleUserMenuClose}
-              PaperProps={{
-                sx: {
-                  mt: 1,
-                  minWidth: 200,
-                  borderRadius: 2,
-                  border: '1px solid #e2e8f0',
-                  boxShadow: '0 10px 25px -5px rgb(0 0 0 / 0.1)'
-                }
-              }}
-            >
-              <MenuItem
-                onClick={handleUserMenuClose}
-                sx={{
-                  gap: 2,
-                  py: 1.5,
-                  '&:hover': {
-                    bgcolor: '#f8fafc'
-                  }
-                }}
-              >
-                <AccountCircleIcon fontSize="small" sx={{ color: '#64748b' }} />
-                <Typography variant="body2">프로필 설정</Typography>
-              </MenuItem>
-              
-              <MenuItem
-                onClick={handleUserMenuClose}
-                sx={{
-                  gap: 2,
-                  py: 1.5,
-                  '&:hover': {
-                    bgcolor: '#fef2f2'
-                  }
-                }}
-              >
-                <LogoutIcon fontSize="small" sx={{ color: '#dc2626' }} />
-                <Typography variant="body2" color="#dc2626">
-                  로그아웃
-                </Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
+            로그아웃
+          </Button>
         </Box>
       </Toolbar>
     </AppBar>

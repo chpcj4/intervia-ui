@@ -1,8 +1,12 @@
-import { Box, Typography, IconButton, Paper, Divider, TextField, Button } from "@mui/material"
-import { Delete, Edit, Save, Cancel } from "@mui/icons-material"
-import { useState } from 'react';
+import { Box, Typography, IconButton, TextField, Button, Chip, Card, CardContent, Grow, Checkbox } from "@mui/material"
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Cancel';
+import SmartToyIcon from '@mui/icons-material/SmartToy';
+import { useState, forwardRef } from 'react';
 
-// 더미 데이터 구조에 맞는 타입을 정의합니다. 실제 API 모델과 일치시킬 수 있습니다.
+// 키워드 데이터 타입 정의
 interface KeywordCriterion {
   keyword_score: number;
   keyword_guideline: string;
@@ -15,123 +19,280 @@ interface KeywordData {
   keyword_criteria: KeywordCriterion[];
 }
 
-// props 타입을 변경하여 KeywordData 객체를 받도록 합니다.
-const KeywordDetailCard = ({ keywordData }: { keywordData: KeywordData }) => {
-  // keywordData 객체에서 필요한 정보를 구조분해 할당하여 사용합니다.
-  const { keyword_name, keyword_detail, keyword_criteria } = keywordData;
+interface KeywordDetailCardProps {
+  keyword: KeywordData;
+  index: number;
+  onEdit: (keywordId: number) => void;
+  onSave: (keywordId: number) => void;
+  onCancel: (keywordId: number) => void;
+  onDelete: (keywordId: number) => void;
+  onDetailChange: (keywordId: number, value: string) => void;
+  onCriterionChange: (keywordId: number, index: number, value: string) => void;
+  isEditing: boolean;
+  editedKeyword?: KeywordData;
+  // 체크박스 관련 props 추가
+  showCheckbox?: boolean;
+  isChecked?: boolean;
+  onCheckboxChange?: (keywordId: number) => void;
+}
 
-  // 수정 모드 상태 관리
-  const [isEditing, setIsEditing] = useState(false);
-  // 수정 중인 상세 설명 상태 관리
-  const [editedDetail, setEditedDetail] = useState(keyword_detail);
-  // 수정 중인 평가 기준 배열 상태 관리
-  const [editedCriteria, setEditedCriteria] = useState<KeywordCriterion[]>([]);
-
-  // 편집 버튼 클릭 핸들러
-  const handleEditClick = () => {
-    setIsEditing(true);
-    setEditedDetail(keyword_detail); // 수정 시작 시 현재 상세 설명으로 초기화
-    setEditedCriteria(keyword_criteria); // 수정 시작 시 현재 평가 기준으로 초기화
-  };
-
-  // 저장 버튼 클릭 핸들러 (API 연동 부분은 나중에 구현)
-  const handleSaveClick = () => {
-    console.log("Saving Detail: ", editedDetail);
-    console.log("Saving Criteria: ", editedCriteria);
-    // TODO: 여기에 API 호출 로직 또는 부모 컴포넌트로 데이터 전달 로직 추가
-    setIsEditing(false); // 저장 후 수정 모드 종료
-  };
-
-  // 취소 버튼 클릭 핸들러
-  const handleCancelClick = () => {
-    setEditedDetail(keyword_detail); // 변경사항 취소 시 원래 상세 설명으로 되돌림
-    setEditedCriteria(keyword_criteria); // 변경사항 취소 시 원래 평가 기준으로 되돌림
-    setIsEditing(false); // 수정 모드 종료
-  };
-
-  // 평가 기준 텍스트 변경 핸들러
-  const handleCriterionChange = (index: number, value: string) => {
-    const newEditedCriteria = [...editedCriteria];
-    newEditedCriteria[index].keyword_guideline = value;
-    setEditedCriteria(newEditedCriteria);
-  };
+const KeywordDetailCard = forwardRef<HTMLDivElement, KeywordDetailCardProps>(({
+  keyword,
+  index,
+  onEdit,
+  onSave,
+  onCancel,
+  onDelete,
+  onDetailChange,
+  onCriterionChange,
+  isEditing,
+  editedKeyword,
+  showCheckbox = false,
+  isChecked = false,
+  onCheckboxChange
+}, ref) => {
+  const currentKeyword = isEditing && editedKeyword ? editedKeyword : keyword;
 
   return (
-    <Paper variant="outlined" sx={{ p: 3, mb: 3 }}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-        {/* title 대신 keyword_name을 사용합니다. */}
-        <Typography variant="h6" fontWeight="bold">{keyword_name}</Typography>
-        <Box>
-          {isEditing ? (
-            // 수정 모드일 때 저장/취소 버튼 표시
-            <>
-              <IconButton onClick={handleSaveClick}><Save /></IconButton>
-              <IconButton onClick={handleCancelClick}><Cancel /></IconButton>
-            </>
-          ) : (
-            // 보기 모드일 때 수정/삭제 버튼 표시
-            <>
-              <IconButton onClick={handleEditClick}><Edit /></IconButton>
-              <IconButton><Delete /></IconButton>
-            </>
-          )}
-        </Box>
-      </Box>
+    <Grow
+      in={true}
+      timeout={300 + index * 100}
+    >
+      <div ref={ref}>
+        <Card
+          elevation={0}
+          sx={{
+            mb: 3,
+            border: isEditing ? '1px solid #3b82f6' : '1px solid #e2e8f0',
+            borderRadius: 3,
+            bgcolor: isEditing ? '#f2f6fc' : 'white',
+            transition: 'all 0.2s ease-in-out',
+            '&:hover': {
+              boxShadow: '0 10px 25px -5px rgb(0 0 0 / 0.1)',
+              borderColor: '#3b82f6',
+              transform: 'translateY(-2px)'
+            }
+          }}
+        >
+          <CardContent sx={{ p: 4 }}>
+            {/* 키워드 헤더 */}
+            <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+              <Box display="flex" alignItems="center" gap={2}>
+                {/* 체크박스 (조건부 표시) */}
+                {showCheckbox && (
+                  <Checkbox
+                    checked={isChecked}
+                    onChange={() => onCheckboxChange?.(keyword.keyword_id)}
+                    sx={{ p: 0 }}
+                  />
+                )}
+                <Typography variant="h5" fontWeight="700" color="#334155">
+                  {keyword.keyword_name}
+                </Typography>
+              </Box>
+              <Box display="flex" gap={1}>
+                {isEditing ? (
+                  <>
+                    <IconButton
+                      size="small"
+                      onClick={() => onSave(keyword.keyword_id)}
+                      sx={{
+                        bgcolor: '#10b981',
+                        color: 'white',
+                        '&:hover': { bgcolor: '#059669' }
+                      }}
+                    >
+                      <SaveIcon fontSize="small" />
+                    </IconButton>
+                    <IconButton
+                      size="small"
+                      onClick={() => onCancel(keyword.keyword_id)}
+                      sx={{
+                        bgcolor: '#6b7280',
+                        color: 'white',
+                        '&:hover': { bgcolor: '#4b5563' }
+                      }}
+                    >
+                      <CancelIcon fontSize="small" />
+                    </IconButton>
+                  </>
+                ) : (
+                  <>
+                    <IconButton
+                      size="small"
+                      onClick={() => onEdit(keyword.keyword_id)}
+                      sx={{
+                        bgcolor: '#f1f5f9',
+                        '&:hover': { bgcolor: '#e2e8f0' }
+                      }}
+                    >
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                    <IconButton
+                      size="small"
+                      onClick={() => onDelete(keyword.keyword_id)}
+                      sx={{
+                        bgcolor: '#fef2f2',
+                        color: '#dc2626',
+                        '&:hover': { bgcolor: '#fee2e2' }
+                      }}
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </>
+                )}
+              </Box>
+            </Box>
 
-      <Box display="flex" alignItems="center" mb={1}>
-        <Typography fontWeight="bold">상세 설명</Typography>
-        {/* AI 생성 버튼은 수정 모드에서만 표시됩니다. */}
-      </Box>
-      {isEditing ? (
-        <Box display="flex" alignItems="center" mb={2}>
-          {/* 수정 모드일 때 TextField로 상세 설명 수정 가능하게 함 */}
-          <TextField
-            fullWidth
-            multiline
-            value={editedDetail}
-            onChange={(e) => setEditedDetail(e.target.value)}
-            variant="outlined"
-            size="small"
-            sx={{ mr: 1 }} // TextField와 버튼 사이 간격 추가
-          />
-          <Button variant="outlined" size="small">AI 생성</Button>
-        </Box>
-      ) : (
-        // 보기 모드일 때 Typography로 상세 설명 표시
-        <Typography color="text.secondary" mb={2}>
-          {keyword_detail}
-        </Typography>
-      )}
+            {/* 구분선 */}
+            <Box sx={{ height: 1, bgcolor: '#e2e8f0', mb: 3 }} />
 
-      <Typography fontWeight="bold" mb={1}>평가 기준</Typography>
-      {/* 평가 기준 목록을 수정 모드에 따라 TextField 또는 Typography로 표시합니다. */}
-      {isEditing ? (
-        // 수정 모드일 때
-        editedCriteria.map((criterion, index) => (
-          <Box key={criterion.keyword_score} display="flex" alignItems="center" mb={1}>
-            <Typography fontWeight="bold" sx={{ width: 40, flexShrink: 0 }}>{criterion.keyword_score}점</Typography>
-            <TextField
-              fullWidth
-              multiline
-              value={criterion.keyword_guideline}
-              onChange={(e) => handleCriterionChange(index, e.target.value)}
-              variant="outlined"
-              size="small"
-              sx={{ ml: 2 }}
-            />
-          </Box>
-        ))
-      ) : (
-        // 보기 모드일 때
-        keyword_criteria.map((criterion) => (
-          <Box key={criterion.keyword_score} display="flex" mb={1}>
-            <Typography fontWeight="bold" sx={{ width: 40, flexShrink: 0 }}>{criterion.keyword_score}점</Typography>
-            <Typography sx={{ ml: 2 }}>{criterion.keyword_guideline}</Typography>
-          </Box>
-        ))
-      )}
-    </Paper>
-  )
-}
+            {/* 상세 설명 */}
+            <Box mb={4}>
+              <Typography 
+                variant="h6" 
+                fontWeight="700" 
+                color="#334155" 
+                mb={2}
+              >
+                상세 설명
+              </Typography>
+              {isEditing ? (
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={3}
+                  variant="outlined"
+                  value={currentKeyword.keyword_detail}
+                  onChange={(e) => onDetailChange(keyword.keyword_id, e.target.value)}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 3,
+                      bgcolor: 'white',
+                      '&:hover': {
+                        bgcolor: '#f8fafc'
+                      }
+                    }
+                  }}
+                />
+              ) : (
+                <Box 
+                  sx={{ 
+                    bgcolor: '#f8fafc',
+                    p: 3,
+                    borderRadius: 3,
+                    border: '1px solid #e2e8f0'
+                  }}
+                >
+                  <Typography 
+                    variant="body1" 
+                    color="#475569"
+                    lineHeight={1.6}
+                  >
+                    {currentKeyword.keyword_detail}
+                  </Typography>
+                </Box>
+              )}
+            </Box>
+
+            {/* 평가 기준 */}
+            <Box>
+              <Box display="flex" alignItems="center" justifyContent="space-between" mb={3}>
+                <Typography 
+                  variant="h6" 
+                  fontWeight="700" 
+                  color="#334155"
+                >
+                  평가 기준
+                </Typography>
+                {isEditing && (
+                  <Button
+                    variant="contained"
+                    size="small"
+                    startIcon={<SmartToyIcon />}
+                    sx={{
+                      bgcolor: '#3b82f6',
+                      borderRadius: 2,
+                      textTransform: 'none',
+                      '&:hover': { bgcolor: '#2563eb' }
+                    }}
+                  >
+                    AI 생성
+                  </Button>
+                )}
+              </Box>
+              
+              <Box display="flex" flexDirection="column" gap={2}>
+                {currentKeyword.keyword_criteria.map((criterion, criterionIndex) => (
+                  <Box 
+                    key={criterion.keyword_score}
+                    display="flex" 
+                    gap={2}
+                    sx={{
+                      p: 3,
+                      bgcolor: 'white',
+                      borderRadius: 3,
+                      border: '1px solid #e2e8f0',
+                      transition: 'all 0.2s ease',
+                      '&:hover': {
+                        borderColor: '#3b82f6',
+                        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                      }
+                    }}
+                  >
+                    <Box sx={{ minWidth: 80 }}>
+                      <Chip
+                        label={`${criterion.keyword_score}점`}
+                        sx={{
+                          bgcolor: criterion.keyword_score >= 4 ? '#10b981' : 
+                                   criterion.keyword_score >= 3 ? '#f59e0b' : '#ef4444',
+                          color: 'white',
+                          fontWeight: 700,
+                          fontSize: '0.875rem'
+                        }}
+                      />
+                    </Box>
+                    {isEditing ? (
+                      <TextField
+                        fullWidth
+                        variant="outlined"
+                        value={criterion.keyword_guideline}
+                        onChange={(e) => onCriterionChange(keyword.keyword_id, criterionIndex, e.target.value)}
+                        sx={{
+                          '& .MuiOutlinedInput-root': {
+                            borderRadius: 2,
+                            bgcolor: '#f8fafc',
+                            '&:hover': {
+                              bgcolor: 'white'
+                            },
+                            '&.Mui-focused': {
+                              borderColor: '#3b82f6',
+                              borderBottomWidth: '3px'
+                            }
+                          }
+                        }}
+                      />
+                    ) : (
+                      <Typography 
+                        variant="body1" 
+                        color="#475569"
+                        lineHeight={1.5}
+                        flex={1}
+                      >
+                        {criterion.keyword_guideline}
+                      </Typography>
+                    )}
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          </CardContent>
+        </Card>
+      </div>
+    </Grow>
+  );
+});
+
+KeywordDetailCard.displayName = 'KeywordDetailCard';
 
 export default KeywordDetailCard

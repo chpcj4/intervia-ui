@@ -1,9 +1,6 @@
-import { Box, Typography, Paper, Button, TextField, IconButton, CircularProgress, Chip, Card, CardContent, Fade, Grow } from "@mui/material"
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import { Box, Typography, Button, TextField, CircularProgress, Chip, Card, CardContent, Fade } from "@mui/material"
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import TopNavBar from "./TopNavBar"
 import SideKeywordList from "./SideKeywordList"
 import KeywordDetailCard from "./KeywordDetailCard"
@@ -17,77 +14,77 @@ const dummyKeywords = [
     "keyword_criteria": [
       {
         "keyword_score": 5,
-        "keyword_guideline": "복잡한 프로젝트 상황에서 스스로 문제를 정의하고 해결책을 제안하여 팀의 방향성을 크게 개선했다."
+        "keyword_guideline": "조직/팀의 방향성과 부합하는 행동을 스스로 판단하고 실행한 구체 사례가 있으며, 결과적으로 긍정적 영향이 확인됨"
       },
       {
         "keyword_score": 4,
-        "keyword_guideline": "일상적인 업무에서 자발적으로 개선점을 찾아내고 이를 실행하여 업무 효율을 높였다."
+        "keyword_guideline": "주도적으로 업무를 이끌고 개선한 사례가 있으며, 방향성은 대체로 타당했음"
       },
       {
         "keyword_score": 3,
-        "keyword_guideline": "주어진 업무를 스스로 관리하고 마감 기한을 준수하여 완료했다."
+        "keyword_guideline": "주어진 업무 내에서 부분적으로 능동적인 태도를 보였으나, 방향성에 대한 고민은 제한적임"
       },
       {
         "keyword_score": 2,
-        "keyword_guideline": "지시된 업무를 수행하였으나 추가적인 개선이나 주도적인 행동은 보이지 않았다."
+        "keyword_guideline": "기본적으로 지시를 따라 행동하며, 능동적으로 상황을 바꾸려는 시도는 드묾"
       },
       {
         "keyword_score": 1,
-        "keyword_guideline": "지시된 업무를 수행하는 데에도 지속적인 관리와 지도가 필요했다."
+        "keyword_guideline": "수동적인 태도가 지속되며, 자율적 판단이나 실행 경험이 없음"
       }
     ]
   },
   {
     "keyword_id": 2,
     "keyword_name": "의욕적",
-    "keyword_detail": "행복을 추구하며 일에 몰입하는 내적 에너지 발현",
+    "keyword_detail": "일에 몰입하고 어려움 속에서도 지속적으로 에너지를 유지함",
     "keyword_criteria": [
       {
         "keyword_score": 5,
-        "keyword_guideline": "어려운 상황에서도 긍정적인 태도로 팀의 사기를 높이고, 높은 성과를 이끌어냈다."
+        "keyword_guideline": "복합적인 문제 상황에서도 업무에 강한 열정을 유지하며, 주변에 긍정적인 영향력을 발휘함"
       },
       {
         "keyword_score": 4,
-        "keyword_guideline": "업무에 대한 열정을 보여주며, 팀원들에게 긍정적인 영향을 미쳤다."
+        "keyword_guideline": "맡은 일에 몰입하고, 성과에 대해 강한 동기와 책임감을 보임"
       },
       {
         "keyword_score": 3,
-        "keyword_guideline": "일상적인 업무에 몰입하여 꾸준히 성과를 유지했다."
+        "keyword_guideline": "업무에 대한 흥미와 열정을 보이긴 하나, 상황에 따라 동기 수준이 변화함"
       },
       {
         "keyword_score": 2,
-        "keyword_guideline": "업무에 대한 열정이 부족하여, 성과가 일정하지 않았다."
+        "keyword_guideline": "기본적인 성실성은 있으나, 몰입도나 지속적 의욕은 부족함"
       },
       {
         "keyword_score": 1,
-        "keyword_guideline": "업무에 대한 의욕이 부족하여, 팀의 사기에 부정적인 영향을 미쳤다."
+        "keyword_guideline": "수동적인 태도가 지속되며, 자율적 판단이나 실행 경험이 없음"
       }
     ]
   },
   {
     "keyword_id": 3,
-    "keyword_name": "높은 목표 추구",
-    "keyword_detail": "기존 틀을 깨고 더 나은 성과를 위해 과감히 도전함",
+    "keyword_name": "Proactive",
+    "keyword_detail": "선제적 실행력",
     "keyword_criteria": [
       {
         "keyword_score": 5,
-        "keyword_guideline": "기존의 한계를 뛰어넘는 목표를 설정하고 이를 달성하여 조직의 성과를 크게 향상시켰다."
+        "keyword_guideline": "지시 없이 문제를 인식하고 해결까지 이끈 경험을 설명"
       },
       {
         "keyword_score": 4,
-        "keyword_guideline": "높은 목표를 설정하고 이를 달성하기 위해 지속적으로 노력하여 성과를 개선했다."
+        "keyword_guideline": "자율적으로 업무를 개선하거나 아이디어를 제시한 경험"
       },
       {
         "keyword_score": 3,
-        "keyword_guideline": "높은 목표를 설정하고 이를 달성하기 위해 지속적으로 노력하여 성과를 개선했다."
+        "keyword_guideline": "주어진 업무 내에서 수동적이지는 않으나 개선 노력은 미약"
       },
       {
         "keyword_score": 2,
-        "keyword_guideline": "기본적인 목표를 달성하였으나, 추가적인 도전은 부족했다."
+        "keyword_guideline": "지시받은 일만 수행, 주도성 결여"
       },
       {
         "keyword_score": 1,
-        "keyword_guideline": "목표 달성에 대한 의지가 부족하여, 성과가 미흡했다."
+        "keyword_guideline": "문제 해결 시도 없음, 태도 수동적"
       }
     ]
   }
@@ -110,13 +107,73 @@ const AdminEvaluationPage = () => {
   const [isAddingKeyword, setIsAddingKeyword] = useState(false);
   const [newKeywordData, setNewKeywordData] = useState(initialNewKeywordData);
   const [isGeneratingDetail, setIsGeneratingDetail] = useState(false);
+  const [editingKeywordId, setEditingKeywordId] = useState<number | null>(null);
+  const [editedKeywords, setEditedKeywords] = useState<{[key: number]: typeof dummyKeywords[0]}>({});
+  const [selectedKeywordId, setSelectedKeywordId] = useState<number>(1); // 첫 번째 키워드 선택
 
   // 스크롤을 위한 ref들
   const keywordRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
   const newKeywordFormRef = useRef<HTMLDivElement>(null);
+  const mainContentRef = useRef<HTMLDivElement>(null);
+
+  // 스크롤 시 현재 보이는 키워드 감지
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!mainContentRef.current) return;
+
+      const scrollTop = mainContentRef.current.scrollTop;
+      const containerHeight = mainContentRef.current.clientHeight;
+      const containerRect = mainContentRef.current.getBoundingClientRect();
+      
+      // 현재 화면 중앙에 가장 가까운 키워드 찾기
+      let closestKeywordId = selectedKeywordId;
+      let minDistance = Infinity;
+
+      dummyKeywords.forEach((keyword) => {
+        const element = keywordRefs.current[keyword.keyword_id];
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          
+          // 요소가 화면에 보이는지 확인
+          const isVisible = rect.top < containerRect.bottom && rect.bottom > containerRect.top;
+          
+          if (isVisible) {
+            // 요소의 중심점과 화면 중심점 사이의 거리 계산
+            const elementCenter = rect.top + rect.height / 2;
+            const viewportCenter = containerRect.top + containerHeight / 2;
+            const distance = Math.abs(elementCenter - viewportCenter);
+            
+            if (distance < minDistance) {
+              minDistance = distance;
+              closestKeywordId = keyword.keyword_id;
+            }
+          }
+        }
+      });
+
+      // 현재 선택된 키워드와 다르면 업데이트
+      if (closestKeywordId !== selectedKeywordId) {
+        setSelectedKeywordId(closestKeywordId);
+      }
+    };
+
+    const mainContent = mainContentRef.current;
+    if (mainContent) {
+      mainContent.addEventListener('scroll', handleScroll);
+      // 초기 로드 시에도 한 번 실행
+      handleScroll();
+      
+      return () => {
+        if (mainContent) {
+          mainContent.removeEventListener('scroll', handleScroll);
+        }
+      };
+    }
+  }, [selectedKeywordId]);
 
   // 키워드 카드로 스크롤하는 함수
   const scrollToKeyword = (keywordId: number) => {
+    setSelectedKeywordId(keywordId);
     const element = keywordRefs.current[keywordId];
     if (element) {
       element.scrollIntoView({ 
@@ -138,7 +195,65 @@ const AdminEvaluationPage = () => {
     }
   };
 
-  // AI 상세설명 생성 함수
+  // 키워드 수정 관련 함수들
+  const handleEditKeyword = (keywordId: number) => {
+    const keyword = dummyKeywords.find(k => k.keyword_id === keywordId);
+    if (keyword) {
+      setEditedKeywords(prev => ({
+        ...prev,
+        [keywordId]: { ...keyword }
+      }));
+      setEditingKeywordId(keywordId);
+    }
+  };
+
+  const handleSaveKeyword = (keywordId: number) => {
+    console.log("키워드 저장:", editedKeywords[keywordId]);
+    // TODO: API 호출로 실제 저장
+    setEditingKeywordId(null);
+  };
+
+  const handleCancelEdit = (keywordId: number) => {
+    setEditedKeywords(prev => {
+      const newState = { ...prev };
+      delete newState[keywordId];
+      return newState;
+    });
+    setEditingKeywordId(null);
+  };
+
+  const handleEditedDetailChange = (keywordId: number, value: string) => {
+    setEditedKeywords(prev => ({
+      ...prev,
+      [keywordId]: {
+        ...prev[keywordId],
+        keyword_detail: value
+      }
+    }));
+  };
+
+  const handleEditedCriterionChange = (keywordId: number, index: number, value: string) => {
+    setEditedKeywords(prev => {
+      const keyword = prev[keywordId];
+      const newCriteria = [...keyword.keyword_criteria];
+      newCriteria[index].keyword_guideline = value;
+      return {
+        ...prev,
+        [keywordId]: {
+          ...keyword,
+          keyword_criteria: newCriteria
+        }
+      };
+    });
+  };
+
+  const handleDeleteKeyword = (keywordId: number) => {
+    if (confirm('정말로 이 키워드를 삭제하시겠습니까?')) {
+      console.log("키워드 삭제:", keywordId);
+      // TODO: API 호출로 실제 삭제
+    }
+  };
+
   const generateDetailWithAI = async () => {
     if (!newKeywordData.keyword_name.trim()) {
       alert('키워드명을 먼저 입력해주세요.');
@@ -207,7 +322,7 @@ const AdminEvaluationPage = () => {
       <TopNavBar />
       
       <Box display="flex" height="calc(100vh - 64px)">
-        {/* 개선된 사이드바 */}
+        {/* 사이드바 */}
         <Box
           sx={{
             width: 280,
@@ -220,11 +335,13 @@ const AdminEvaluationPage = () => {
             keywords={dummyKeywords} 
             onAddKeywordClick={handleAddKeywordClick}
             onKeywordClick={scrollToKeyword}
+            selectedKeywordId={selectedKeywordId}
           />
         </Box>
 
         {/* 메인 컨텐츠 영역 */}
         <Box 
+          ref={mainContentRef}
           flex={1} 
           sx={{ 
             overflowY: "auto",
@@ -240,171 +357,41 @@ const AdminEvaluationPage = () => {
               color="#1e293b"
               mb={1}
             >
-              키워드 관리
+              평가 기준 관리
             </Typography>
             <Typography 
               variant="body1" 
               color="#64748b"
             >
-              평가 키워드를 생성하고 관리할 수 있습니다.
+              평가 키워드의 상세 설명과 채점 기준을 설정할 수 있습니다.
             </Typography>
           </Box>
 
           {/* 키워드 카드들 */}
-          <Box sx={{ maxWidth: 1000 }}>
-            {dummyKeywords.map((keyword, index) => (
-              <Grow
-                key={keyword.keyword_id}
-                in={true}
-                timeout={300 + index * 100}
-              >
-                <div
+          <Box sx={{ width: '100%' }}>
+            {dummyKeywords.map((keyword, index) => {
+              const isEditing = editingKeywordId === keyword.keyword_id;
+              const currentKeyword = isEditing ? editedKeywords[keyword.keyword_id] : keyword;
+              
+              return (
+                <KeywordDetailCard
+                  key={keyword.keyword_id}
+                  keyword={keyword}
+                  index={index}
                   ref={(el) => {
                     keywordRefs.current[keyword.keyword_id] = el;
                   }}
-                >
-                  <Card
-                    elevation={0}
-                    sx={{
-                      mb: 3,
-                      border: '1px solid #e2e8f0',
-                      borderRadius: 3,
-                      transition: 'all 0.2s ease-in-out',
-                      '&:hover': {
-                        boxShadow: '0 10px 25px -5px rgb(0 0 0 / 0.1)',
-                        borderColor: '#3b82f6',
-                        transform: 'translateY(-2px)'
-                      }
-                    }}
-                  >
-                    <CardContent sx={{ p: 4 }}>
-                      {/* 키워드 헤더 */}
-                      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-                        <Box display="flex" alignItems="center" gap={2}>
-                          <Chip
-                            label={keyword.keyword_name}
-                            sx={{
-                              bgcolor: '#3b82f6',
-                              color: 'white',
-                              fontWeight: 600,
-                              fontSize: '0.875rem',
-                              px: 2,
-                              py: 1,
-                              height: 'auto'
-                            }}
-                          />
-                          <Typography variant="h6" fontWeight="600" color="#334155">
-                            {keyword.keyword_name}
-                          </Typography>
-                        </Box>
-                        <Box display="flex" gap={1}>
-                          <IconButton
-                            size="small"
-                            sx={{
-                              bgcolor: '#f1f5f9',
-                              '&:hover': { bgcolor: '#e2e8f0' }
-                            }}
-                          >
-                            <EditIcon fontSize="small" />
-                          </IconButton>
-                          <IconButton
-                            size="small"
-                            sx={{
-                              bgcolor: '#fef2f2',
-                              color: '#dc2626',
-                              '&:hover': { bgcolor: '#fee2e2' }
-                            }}
-                          >
-                            <DeleteIcon fontSize="small" />
-                          </IconButton>
-                        </Box>
-                      </Box>
-
-                      {/* 상세 설명 */}
-                      <Box mb={4}>
-                        <Typography 
-                          variant="body2" 
-                          fontWeight="600" 
-                          color="#64748b" 
-                          mb={1}
-                          textTransform="uppercase"
-                          letterSpacing={0.5}
-                        >
-                          상세 설명
-                        </Typography>
-                        <Typography 
-                          variant="body1" 
-                          color="#475569"
-                          lineHeight={1.6}
-                          sx={{ 
-                            bgcolor: '#f8fafc',
-                            p: 2,
-                            borderRadius: 2,
-                            border: '1px solid #e2e8f0'
-                          }}
-                        >
-                          {keyword.keyword_detail}
-                        </Typography>
-                      </Box>
-
-                      {/* 평가 기준 */}
-                      <Box>
-                        <Typography 
-                          variant="body2" 
-                          fontWeight="600" 
-                          color="#64748b" 
-                          mb={2}
-                          textTransform="uppercase"
-                          letterSpacing={0.5}
-                        >
-                          평가 기준
-                        </Typography>
-                        <Box display="flex" flexDirection="column" gap={2}>
-                          {keyword.keyword_criteria.map((criterion) => (
-                            <Box 
-                              key={criterion.keyword_score}
-                              display="flex" 
-                              gap={3}
-                              sx={{
-                                p: 3,
-                                bgcolor: 'white',
-                                borderRadius: 2,
-                                border: '1px solid #e2e8f0',
-                                transition: 'all 0.2s ease',
-                                '&:hover': {
-                                  borderColor: '#3b82f6',
-                                  boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
-                                }
-                              }}
-                            >
-                              <Chip
-                                label={`${criterion.keyword_score}점`}
-                                size="small"
-                                sx={{
-                                  bgcolor: criterion.keyword_score >= 4 ? '#10b981' : 
-                                           criterion.keyword_score >= 3 ? '#f59e0b' : '#ef4444',
-                                  color: 'white',
-                                  fontWeight: 600,
-                                  minWidth: 50
-                                }}
-                              />
-                              <Typography 
-                                variant="body2" 
-                                color="#475569"
-                                lineHeight={1.5}
-                                flex={1}
-                              >
-                                {criterion.keyword_guideline}
-                              </Typography>
-                            </Box>
-                          ))}
-                        </Box>
-                      </Box>
-                    </CardContent>
-                  </Card>
-                </div>
-              </Grow>
-            ))}
+                  isEditing={isEditing}
+                  editedKeyword={currentKeyword}
+                  onEdit={handleEditKeyword}
+                  onSave={handleSaveKeyword}
+                  onCancel={handleCancelEdit}
+                  onDelete={handleDeleteKeyword}
+                  onDetailChange={handleEditedDetailChange}
+                  onCriterionChange={handleEditedCriterionChange}
+                />
+              );
+            })}
 
             {/* 새 키워드 추가 폼 */}
             {isAddingKeyword && (
@@ -414,26 +401,30 @@ const AdminEvaluationPage = () => {
                   elevation={0}
                   sx={{
                     mb: 3,
-                    border: '2px solid #3b82f6',
+                    border: '1px solid #3b82f6',
                     borderRadius: 3,
+                    bgcolor: '#f2f6fc',
                     boxShadow: '0 10px 25px -5px rgb(59 130 246 / 0.25)'
                   }}
                 >
                   <CardContent sx={{ p: 4 }}>
                     <Box display="flex" alignItems="center" gap={2} mb={4}>
                       <AddIcon sx={{ color: '#3b82f6' }} />
-                      <Typography variant="h6" fontWeight="700" color="#1e293b">
+                      <Typography variant="h5" fontWeight="700" color="#1e293b">
                         새 키워드 추가
                       </Typography>
                     </Box>
 
+                    {/* 구분선 */}
+                    <Box sx={{ height: 1, bgcolor: '#e2e8f0', mb: 4 }} />
+
                     {/* 키워드명 입력 */}
-                    <Box mb={3}>
+                    <Box mb={4}>
                       <Typography 
-                        variant="body2" 
-                        fontWeight="600" 
+                        variant="h6" 
+                        fontWeight="700" 
                         color="#374151" 
-                        mb={1}
+                        mb={2}
                       >
                         키워드명
                       </Typography>
@@ -446,10 +437,10 @@ const AdminEvaluationPage = () => {
                         placeholder="예: 창의적, 협력적, 리더십 등"
                         sx={{
                           '& .MuiOutlinedInput-root': {
-                            borderRadius: 2,
-                            bgcolor: '#f8fafc',
+                            borderRadius: 3,
+                            bgcolor: 'white',
                             '&:hover': {
-                              bgcolor: 'white'
+                              bgcolor: '#f8fafc'
                             }
                           }
                         }}
@@ -457,28 +448,27 @@ const AdminEvaluationPage = () => {
                     </Box>
 
                     {/* 상세 설명 입력 */}
-                    <Box mb={3}>
-                      <Box display="flex" alignItems="center" justifyContent="space-between" mb={1}>
+                    <Box mb={4}>
+                      <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
                         <Typography 
-                          variant="body2" 
-                          fontWeight="600" 
+                          variant="h6" 
+                          fontWeight="700" 
                           color="#374151"
                         >
                           상세 설명
                         </Typography>
                         <Button
-                          variant="outlined"
+                          variant="contained"
                           size="small"
-                          startIcon={isGeneratingDetail ? <CircularProgress size={16} /> : <SmartToyIcon />}
+                          startIcon={isGeneratingDetail ? <CircularProgress size={16} color="inherit" /> : <SmartToyIcon />}
                           onClick={generateDetailWithAI}
                           disabled={isGeneratingDetail || !newKeywordData.keyword_name.trim()}
                           sx={{ 
                             borderRadius: 2,
-                            borderColor: '#3b82f6',
-                            color: '#3b82f6',
+                            bgcolor: '#3b82f6',
+                            textTransform: 'none',
                             '&:hover': {
-                              bgcolor: '#eff6ff',
-                              borderColor: '#2563eb'
+                              bgcolor: '#2563eb'
                             }
                           }}
                         >
@@ -497,10 +487,10 @@ const AdminEvaluationPage = () => {
                         placeholder="키워드의 상세한 설명을 입력하거나 AI 생성 버튼을 클릭하세요"
                         sx={{
                           '& .MuiOutlinedInput-root': {
-                            borderRadius: 2,
-                            bgcolor: '#f8fafc',
+                            borderRadius: 3,
+                            bgcolor: 'white',
                             '&:hover': {
-                              bgcolor: 'white'
+                              bgcolor: '#f8fafc'
                             }
                           }
                         }}
@@ -509,39 +499,67 @@ const AdminEvaluationPage = () => {
 
                     {/* 평가 기준 입력 */}
                     <Box mb={4}>
+                      <Box display="flex" alignItems="center" justifyContent="space-between" mb={3}>
+                        <Typography 
+                          variant="h6" 
+                          fontWeight="700" 
+                          color="#374151"
+                        >
+                          평가 기준
+                        </Typography>
+                        <Button
+                          variant="contained"
+                          size="small"
+                          startIcon={<SmartToyIcon />}
+                          sx={{
+                            bgcolor: '#3b82f6',
+                            borderRadius: 2,
+                            textTransform: 'none',
+                            '&:hover': { bgcolor: '#2563eb' }
+                          }}
+                        >
+                          AI 생성
+                        </Button>
+                      </Box>
                       <Typography 
                         variant="body2" 
-                        fontWeight="600" 
-                        color="#374151" 
+                        color="#6b7280" 
                         mb={2}
+                        sx={{ fontStyle: 'italic' }}
                       >
-                        평가 기준
+                        키워드와 상세 설명을 입력 후, AI 생성을 통해 평가 기준을 자동으로 생성하실 수 있습니다.
                       </Typography>
+                      
                       {newKeywordData.keyword_criteria.map((criterion, index) => (
                         <Box key={criterion.keyword_score} display="flex" alignItems="center" gap={2} mb={2}>
-                          <Chip
-                            label={`${criterion.keyword_score}점`}
-                            size="small"
-                            sx={{
-                              bgcolor: criterion.keyword_score >= 4 ? '#10b981' : 
-                                       criterion.keyword_score >= 3 ? '#f59e0b' : '#ef4444',
-                              color: 'white',
-                              fontWeight: 600,
-                              minWidth: 50
-                            }}
-                          />
+                          <Box sx={{ minWidth: 80 }}>
+                            <Chip
+                              label={`${criterion.keyword_score}점`}
+                              sx={{
+                                bgcolor: criterion.keyword_score >= 4 ? '#10b981' : 
+                                         criterion.keyword_score >= 3 ? '#f59e0b' : '#ef4444',
+                                color: 'white',
+                                fontWeight: 700,
+                                fontSize: '0.875rem'
+                              }}
+                            />
+                          </Box>
                           <TextField
                             fullWidth
                             variant="outlined"
                             value={criterion.keyword_guideline}
                             onChange={(e) => handleNewCriterionChange(index, e.target.value)}
-                            placeholder={`${criterion.keyword_score}점에 해당하는 평가 기준을 입력하세요`}
+                            placeholder={criterion.keyword_guideline || "텍스트를 입력하세요."}
                             sx={{
                               '& .MuiOutlinedInput-root': {
-                                borderRadius: 2,
-                                bgcolor: '#f8fafc',
+                                borderRadius: 3,
+                                bgcolor: 'white',
                                 '&:hover': {
-                                  bgcolor: 'white'
+                                  bgcolor: '#f8fafc'
+                                },
+                                '&.Mui-focused': {
+                                  borderColor: '#3b82f6',
+                                  borderBottomWidth: index === 0 ? '3px' : '1px'
                                 }
                               }
                             }}
@@ -560,6 +578,7 @@ const AdminEvaluationPage = () => {
                           px: 3,
                           borderColor: '#d1d5db',
                           color: '#6b7280',
+                          textTransform: 'none',
                           '&:hover': {
                             borderColor: '#9ca3af',
                             bgcolor: '#f9fafb'
@@ -575,6 +594,7 @@ const AdminEvaluationPage = () => {
                           borderRadius: 2,
                           px: 3,
                           bgcolor: '#3b82f6',
+                          textTransform: 'none',
                           '&:hover': {
                             bgcolor: '#2563eb'
                           }

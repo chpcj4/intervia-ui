@@ -11,10 +11,11 @@ interface SideKeyword {
 interface SideKeywordListProps {
   keywords: SideKeyword[];
   onAddKeywordClick: () => void;
-  onKeywordClick: (keywordId: number) => void; // 키워드 클릭 핸들러 추가
+  onKeywordClick: (keywordId: number) => void;
+  selectedKeywordId?: number; // 선택된 키워드 ID 추가
 }
 
-const SideKeywordList = ({ keywords, onAddKeywordClick, onKeywordClick }: SideKeywordListProps) => {
+const SideKeywordList = ({ keywords, onAddKeywordClick, onKeywordClick, selectedKeywordId }: SideKeywordListProps) => {
   
   // 키워드 클릭 핸들러
   const handleKeywordClick = (keywordId: number) => {
@@ -43,63 +44,70 @@ const SideKeywordList = ({ keywords, onAddKeywordClick, onKeywordClick }: SideKe
       {/* 키워드 리스트 */}
       <Box sx={{ flex: 1, overflowY: 'auto', p: 2 }}>
         <List sx={{ p: 0 }}>
-          {keywords.map((keyword, index) => (
-            <ListItemButton 
-              key={keyword.keyword_id}
-              onClick={() => handleKeywordClick(keyword.keyword_id)}
-              sx={{
-                borderRadius: 2,
-                mb: 1,
-                p: 2,
-                transition: 'all 0.2s ease-in-out',
-                border: '1px solid transparent',
-                '&:hover': {
-                  bgcolor: '#eff6ff',
-                  borderColor: '#3b82f6',
-                  transform: 'translateX(4px)',
-                  boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
-                },
-                '&:active': {
-                  transform: 'translateX(2px)'
-                }
-              }}
-            >
-              <Box display="flex" alignItems="center" gap={2} width="100%">
-                <Chip
-                  label={index + 1}
-                  size="small"
-                  sx={{
-                    bgcolor: '#f1f5f9',
-                    color: '#64748b',
-                    fontWeight: 600,
-                    width: 24,
-                    height: 24,
-                    fontSize: '0.75rem'
-                  }}
-                />
-                <Box flex={1}>
-                  <Typography 
-                    variant="body2" 
-                    fontWeight="600" 
-                    color="#334155"
+          {keywords.map((keyword, index) => {
+            const isSelected = selectedKeywordId === keyword.keyword_id;
+            
+            return (
+              <ListItemButton 
+                key={keyword.keyword_id}
+                onClick={() => handleKeywordClick(keyword.keyword_id)}
+                sx={{
+                  borderRadius: 2,
+                  mb: 1,
+                  p: 2,
+                  transition: 'all 0.2s ease-in-out',
+                  border: isSelected ? '1px solid #3b82f6' : '1px solid transparent',
+                  borderLeft: isSelected ? '3px solid #3b82f6' : '3px solid transparent',
+                  bgcolor: isSelected ? '#eff6ff' : 'transparent',
+                  '&:hover': {
+                    bgcolor: isSelected ? '#dbeafe' : '#f1f5f9',
+                    borderColor: '#3b82f6',
+                    transform: 'translateX(4px)',
+                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                  },
+                  '&:active': {
+                    transform: 'translateX(2px)'
+                  }
+                }}
+              >
+                <Box display="flex" alignItems="center" gap={2} width="100%">
+                  <Chip
+                    label={index + 1}
+                    size="small"
                     sx={{
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap'
+                      bgcolor: isSelected ? '#3b82f6' : '#f1f5f9',
+                      color: isSelected ? 'white' : '#64748b',
+                      fontWeight: 600,
+                      width: 24,
+                      height: 24,
+                      fontSize: '0.75rem'
                     }}
-                  >
-                    {keyword.keyword_name}
-                  </Typography>
-                  <Typography 
-                    variant="caption" 
-                    color="#94a3b8"
-                  >
-                    평가 키워드
-                  </Typography>
+                  />
+                  <Box flex={1}>
+                    <Typography 
+                      variant="body2" 
+                      fontWeight={isSelected ? "700" : "600"}
+                      color={isSelected ? "#3b82f6" : "#334155"}
+                      sx={{
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap'
+                      }}
+                    >
+                      {keyword.keyword_name}
+                    </Typography>
+                    <Typography 
+                      variant="caption" 
+                      color={isSelected ? "#3b82f6" : "#94a3b8"}
+                      fontWeight={isSelected ? "600" : "400"}
+                    >
+                      평가 키워드
+                    </Typography>
+                  </Box>
                 </Box>
-              </Box>
-            </ListItemButton>
-          ))}
+              </ListItemButton>
+            );
+          })}
         </List>
       </Box>
 
@@ -129,31 +137,6 @@ const SideKeywordList = ({ keywords, onAddKeywordClick, onKeywordClick }: SideKe
         >
           키워드 추가
         </Button>
-        
-        {/* 추가 통계 정보 */}
-        <Box mt={2} p={2} sx={{ bgcolor: '#f8fafc', borderRadius: 2, border: '1px solid #e2e8f0' }}>
-          <Typography variant="caption" color="#64748b" fontWeight="600">
-            빠른 통계
-          </Typography>
-          <Box display="flex" justifyContent="space-between" mt={1}>
-            <Box textAlign="center">
-              <Typography variant="h6" fontWeight="700" color="#3b82f6">
-                {keywords.length}
-              </Typography>
-              <Typography variant="caption" color="#64748b">
-                총 키워드
-              </Typography>
-            </Box>
-            <Box textAlign="center">
-              <Typography variant="h6" fontWeight="700" color="#10b981">
-                5
-              </Typography>
-              <Typography variant="caption" color="#64748b">
-                평가 단계
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
       </Box>
     </Box>
   )
