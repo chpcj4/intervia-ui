@@ -1,4 +1,4 @@
-import { Box, Typography, Button, Chip, Card, CardContent, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Collapse, Avatar } from "@mui/material"
+import { Box, Typography, Button, Chip, Card, CardContent, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Collapse, Avatar, Menu, MenuItem } from "@mui/material"
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -6,7 +6,10 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import TableViewIcon from '@mui/icons-material/TableView';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import BarChartIcon from '@mui/icons-material/BarChart';
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts"
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
+import CancelIcon from '@mui/icons-material/Cancel';
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from "recharts"
 import TopNavBar from "./TopNavBar"
 import { useState } from 'react';
 
@@ -24,7 +27,7 @@ interface InterviewData {
   interviewDate: string;
   interviewTime: string;
   location: string;
-  status: 'completed' | 'pending';
+  status: 'completed' | 'pending' | 'absent';  // 'absent' 추가
   totalScore: number | null;
   scores: {
     자발성: number | null;
@@ -118,7 +121,10 @@ const dummyInterviewData: InterviewData[] = [
 const ReportManagementPage = () => {
   const [selectedJobCategory, setSelectedJobCategory] = useState<number>(1);
   const [isStatisticsExpanded, setIsStatisticsExpanded] = useState<boolean>(true);
-  const [interviews] = useState<InterviewData[]>(dummyInterviewData);
+  const [interviews, setInterviews] = useState<InterviewData[]>(dummyInterviewData);
+  const [hoveredButton, setHoveredButton] = useState<string | null>(null);
+  const [statusMenuAnchor, setStatusMenuAnchor] = useState<{ [key: string]: HTMLElement | null }>({});
+  const [selectedInterview, setSelectedInterview] = useState<string | null>(null);
 
   const handleJobCategorySelect = (categoryId: number) => {
     setSelectedJobCategory(categoryId);
@@ -144,6 +150,51 @@ const ReportManagementPage = () => {
     console.log(`${applicationNumber} PDF 다운로드`);
   };
 
+  // 상태 변경 관련 함수들
+  const handleStatusClick = (event: React.MouseEvent<HTMLElement>, applicationNumber: string) => {
+    setStatusMenuAnchor(prev => ({
+      ...prev,
+      [applicationNumber]: event.currentTarget
+    }));
+    setSelectedInterview(applicationNumber);
+  };
+
+  const handleStatusMenuClose = (applicationNumber: string) => {
+    setStatusMenuAnchor(prev => ({
+      ...prev,
+      [applicationNumber]: null
+    }));
+    setSelectedInterview(null);
+  };
+
+  const handleStatusChange = async (applicationNumber: string, newStatus: 'completed' | 'pending' | 'absent') => {
+    try {
+      // API 호출 시뮬레이션
+      console.log(`API 호출: 지원번호 ${applicationNumber}의 상태를 ${newStatus}로 변경`);
+      
+      // 실제 API 호출 예시:
+      // const response = await fetch(`/api/interviews/${applicationNumber}/status`, {
+      //   method: 'PATCH',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ status: newStatus })
+      // });
+      
+      // 상태 업데이트
+      setInterviews(prev => prev.map(interview => 
+        interview.applicationNumber === applicationNumber 
+          ? { ...interview, status: newStatus }
+          : interview
+      ));
+      
+      // 메뉴 닫기
+      handleStatusMenuClose(applicationNumber);
+      
+    } catch (error) {
+      console.error('상태 변경 실패:', error);
+      alert('상태 변경에 실패했습니다. 다시 시도해주세요.');
+    }
+  };
+
   // 도넛 차트 데이터 (면접 진행 현황)
   const statusData = [
     { name: '진행 완료', value: 2, color: '#22c55e' },
@@ -159,55 +210,115 @@ const ReportManagementPage = () => {
     { range: '21-25', count: 0 }
   ];
 
-  // 막대 그래프 데이터 (키워드별 평균 점수)
-  const keywordAverageData = [
-    { keyword: '자발성', average: 3.0 },
-    { keyword: '높은목표', average: 5.0 },
-    { keyword: '의욕적', average: 4.5 },
-    { keyword: '협업', average: 3.0 },
-    { keyword: '전문성', average: 3.5 }
+  // 레이더 차트 데이터 (키워드별 평균 점수)
+  const keywordRadarData = [
+    { keyword: '자발성', average: 3.0, fullMark: 5 },
+    { keyword: '높은목표', average: 5.0, fullMark: 5 },
+    { keyword: '의욕적', average: 4.5, fullMark: 5 },
+    { keyword: '협업', average: 3.0, fullMark: 5 },
+    { keyword: '전문성', average: 3.5, fullMark: 5 }
   ];
 
-  const getStatusChip = (status: 'completed' | 'pending') => {
-    if (status === 'completed') {
-      return (
+  const getStatusChip = (status: 'completed' | 'pending' | 'absent', applicationNumber: string) => {
+    const statusConfig = {
+      completed: {
+        label: '진행 완료',
+        icon: <CheckCircleIcon sx={{ fontSize: 16 }} />,
+        bgcolor: '#dcfce7',
+        color: '#166534'
+      },
+      pending: {
+        label: '진행 전',
+        icon: <HourglassEmptyIcon sx={{ fontSize: 16 }} />,
+        bgcolor: '#f3f4f6',
+        color: '#374151'
+      },
+      absent: {
+        label: '불참',
+        icon: <CancelIcon sx={{ fontSize: 16 }} />,
+        bgcolor: '#fee2e2',
+        color: '#dc2626'
+      }
+    };
+
+    const config = statusConfig[status];
+
+    return (
+      <>
         <Chip 
-          label="진행 완료"
+          label={config.label}
+          icon={config.icon}
           size="small"
+          onClick={(e) => handleStatusClick(e, applicationNumber)}
           sx={{
-            bgcolor: '#dcfce7',
-            color: '#166534',
+            bgcolor: config.bgcolor,
+            color: config.color,
             fontWeight: 600,
-            '& .MuiChip-avatar': {
-              bgcolor: '#22c55e',
-              width: 8,
-              height: 8,
-              ml: 1
+            cursor: 'pointer',
+            '&:hover': {
+              bgcolor: config.bgcolor,
+              opacity: 0.8,
+              transform: 'scale(1.02)'
+            },
+            transition: 'all 0.2s ease'
+          }}
+        />
+        
+        {/* 상태 변경 메뉴 */}
+        <Menu
+          anchorEl={statusMenuAnchor[applicationNumber]}
+          open={Boolean(statusMenuAnchor[applicationNumber])}
+          onClose={() => handleStatusMenuClose(applicationNumber)}
+          transformOrigin={{ horizontal: 'center', vertical: 'top' }}
+          anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+          PaperProps={{
+            sx: {
+              mt: 1,
+              borderRadius: 2,
+              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+              minWidth: 120
             }
           }}
-          avatar={<Box />}
-        />
-      );
-    } else {
-      return (
-        <Chip 
-          label="진행 전"
-          size="small"
-          sx={{
-            bgcolor: '#f3f4f6',
-            color: '#374151',
-            fontWeight: 600,
-            '& .MuiChip-avatar': {
-              bgcolor: '#9ca3af',
-              width: 8,
-              height: 8,
-              ml: 1
-            }
-          }}
-          avatar={<Box />}
-        />
-      );
-    }
+        >
+          <MenuItem 
+            onClick={() => handleStatusChange(applicationNumber, 'completed')}
+            sx={{ 
+              display: 'flex', 
+              gap: 1, 
+              color: '#166534',
+              '&:hover': { bgcolor: '#dcfce7' }
+            }}
+          >
+            <CheckCircleIcon sx={{ fontSize: 18 }} />
+            진행 완료
+          </MenuItem>
+          <MenuItem 
+            onClick={() => handleStatusChange(applicationNumber, 'pending')}
+            sx={{ 
+              display: 'flex', 
+              gap: 1, 
+              color: '#374151',
+              '&:hover': { bgcolor: '#f3f4f6' }
+            }}
+          >
+            <HourglassEmptyIcon sx={{ fontSize: 18 }} />
+            진행 전
+          </MenuItem>
+          <MenuItem 
+            onClick={() => handleStatusChange(applicationNumber, 'absent')}
+            sx={{ 
+              display: 'flex', 
+              gap: 1, 
+              color: '#dc2626',
+              '&:hover': { bgcolor: '#fee2e2' }
+            }}
+          >
+            <CancelIcon sx={{ fontSize: 18 }} />
+            불참
+          </MenuItem>
+        </Menu>
+      </>
+    );
   };
 
   return (
@@ -277,60 +388,220 @@ const ReportManagementPage = () => {
             </Typography>
           </Box>
 
-          {/* 직군별 헤더 카드 */}
+          {/* 직군별 헤더 카드 - 스크롤 시 고정 */}
           <Card
             elevation={0}
             sx={{
+              position: 'sticky',
+              top: 0,
+              zIndex: 100,
               mb: 3,
               borderRadius: 3,
               bgcolor: 'white',
-              border: '1px solid #e2e8f0'
+              border: '1px solid #e2e8f0',
+              overflow: 'visible',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)'  // 고정 시 그림자 추가
             }}
           >
-            <CardContent sx={{ p: 3 }}>
+            <CardContent sx={{ p: 3, overflow: 'visible' }}>
               <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Typography variant="h5" fontWeight="700" color="#0b57d0">
                   {dummyJobCategories.find(cat => cat.id === selectedJobCategory)?.name}
                 </Typography>
-                <Box display="flex" gap={1}>
+                
+                {/* 다운로드 버튼들 with 툴팁 */}
+                <Box display="flex" gap={1} sx={{ position: 'relative', zIndex: 10 }}>
                   {/* ZIP 다운로드 버튼 */}
-                  <IconButton
-                    onClick={handleZipDownload}
-                    sx={{
-                      bgcolor: '#fef3c7',
-                      color: '#d97706',
-                      '&:hover': { bgcolor: '#fde68a' }
-                    }}
-                    title="개별 pdf 한꺼번에 다운 받기"
-                  >
-                    <ArchiveIcon />
-                  </IconButton>
+                  <Box sx={{ position: 'relative' }}>
+                    <IconButton
+                      onClick={handleZipDownload}
+                      onMouseEnter={() => setHoveredButton('zip')}
+                      onMouseLeave={() => setHoveredButton(null)}
+                      sx={{
+                        bgcolor: '#fef3c7',
+                        color: '#d97706',
+                        width: 44,
+                        height: 44,
+                        border: '2px solid #f59e0b',
+                        '&:hover': { 
+                          bgcolor: '#fde68a',
+                          borderColor: '#d97706',
+                          transform: 'scale(1.05)'
+                        },
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      <ArchiveIcon fontSize="small" />
+                    </IconButton>
+                    
+                    {/* ZIP 툴팁 */}
+                    {hoveredButton === 'zip' && (
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          top: 55,  // 버튼 아래쪽에 표시
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          backgroundColor: '#1f2937',
+                          color: 'white',
+                          padding: '8px 12px',
+                          borderRadius: 2,
+                          fontSize: '0.75rem',
+                          fontWeight: 500,
+                          whiteSpace: 'nowrap',
+                          zIndex: 1000,
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                          '&::before': {  // 화살표를 위쪽으로
+                            content: '""',
+                            position: 'absolute',
+                            bottom: '100%',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            width: 0,
+                            height: 0,
+                            borderLeft: '5px solid transparent',
+                            borderRight: '5px solid transparent',
+                            borderBottom: '5px solid #1f2937'
+                          },
+                          animation: 'tooltipFadeIn 0.2s ease-out',
+                          '@keyframes tooltipFadeIn': {
+                            from: { opacity: 0, transform: 'translateX(-50%) translateY(-5px)' },
+                            to: { opacity: 1, transform: 'translateX(-50%) translateY(0)' }
+                          }
+                        }}
+                      >
+                        개별 pdf 한꺼번에 다운 받기
+                      </Box>
+                    )}
+                  </Box>
                   
                   {/* PDF 요약 다운로드 버튼 */}
-                  <IconButton
-                    onClick={handlePdfSummaryDownload}
-                    sx={{
-                      bgcolor: '#fecaca',
-                      color: '#dc2626',
-                      '&:hover': { bgcolor: '#fca5a5' }
-                    }}
-                    title="면접결과 요약 pdf 생성 및 다운로드"
-                  >
-                    <PictureAsPdfIcon />
-                  </IconButton>
+                  <Box sx={{ position: 'relative' }}>
+                    <IconButton
+                      onClick={handlePdfSummaryDownload}
+                      onMouseEnter={() => setHoveredButton('pdf')}
+                      onMouseLeave={() => setHoveredButton(null)}
+                      sx={{
+                        bgcolor: '#fecaca',
+                        color: '#dc2626',
+                        width: 44,
+                        height: 44,
+                        border: '2px solid #ef4444',
+                        '&:hover': { 
+                          bgcolor: '#fca5a5',
+                          borderColor: '#dc2626',
+                          transform: 'scale(1.05)'
+                        },
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      <PictureAsPdfIcon fontSize="small" />
+                    </IconButton>
+                    
+                    {/* PDF 툴팁 */}
+                    {hoveredButton === 'pdf' && (
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          top: 55,  // 버튼 아래쪽에 표시
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          backgroundColor: '#1f2937',
+                          color: 'white',
+                          padding: '8px 12px',
+                          borderRadius: 2,
+                          fontSize: '0.75rem',
+                          fontWeight: 500,
+                          whiteSpace: 'nowrap',
+                          zIndex: 1000,
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                          '&::before': {  // 화살표를 위쪽으로
+                            content: '""',
+                            position: 'absolute',
+                            bottom: '100%',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            width: 0,
+                            height: 0,
+                            borderLeft: '5px solid transparent',
+                            borderRight: '5px solid transparent',
+                            borderBottom: '5px solid #1f2937'
+                          },
+                          animation: 'tooltipFadeIn 0.2s ease-out',
+                          '@keyframes tooltipFadeIn': {
+                            from: { opacity: 0, transform: 'translateX(-50%) translateY(-5px)' },
+                            to: { opacity: 1, transform: 'translateX(-50%) translateY(0)' }
+                          }
+                        }}
+                      >
+                        면접결과 요약 pdf 생성 및 다운로드
+                      </Box>
+                    )}
+                  </Box>
                   
                   {/* Excel 다운로드 버튼 */}
-                  <IconButton
-                    onClick={handleExcelDownload}
-                    sx={{
-                      bgcolor: '#d1fae5',
-                      color: '#059669',
-                      '&:hover': { bgcolor: '#a7f3d0' }
-                    }}
-                    title="면접 결과 excel 파일 다운로드"
-                  >
-                    <TableViewIcon />
-                  </IconButton>
+                  <Box sx={{ position: 'relative' }}>
+                    <IconButton
+                      onClick={handleExcelDownload}
+                      onMouseEnter={() => setHoveredButton('excel')}
+                      onMouseLeave={() => setHoveredButton(null)}
+                      sx={{
+                        bgcolor: '#d1fae5',
+                        color: '#059669',
+                        width: 44,
+                        height: 44,
+                        border: '2px solid #10b981',
+                        '&:hover': { 
+                          bgcolor: '#a7f3d0',
+                          borderColor: '#059669',
+                          transform: 'scale(1.05)'
+                        },
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      <TableViewIcon fontSize="small" />
+                    </IconButton>
+                    
+                    {/* Excel 툴팁 */}
+                    {hoveredButton === 'excel' && (
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          top: 55,  // 버튼 아래쪽에 표시
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          backgroundColor: '#1f2937',
+                          color: 'white',
+                          padding: '8px 12px',
+                          borderRadius: 2,
+                          fontSize: '0.75rem',
+                          fontWeight: 500,
+                          whiteSpace: 'nowrap',
+                          zIndex: 1000,
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                          '&::before': {  // 화살표를 위쪽으로
+                            content: '""',
+                            position: 'absolute',
+                            bottom: '100%',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            width: 0,
+                            height: 0,
+                            borderLeft: '5px solid transparent',
+                            borderRight: '5px solid transparent',
+                            borderBottom: '5px solid #1f2937'
+                          },
+                          animation: 'tooltipFadeIn 0.2s ease-out',
+                          '@keyframes tooltipFadeIn': {
+                            from: { opacity: 0, transform: 'translateX(-50%) translateY(-5px)' },
+                            to: { opacity: 1, transform: 'translateX(-50%) translateY(0)' }
+                          }
+                        }}
+                      >
+                        면접 결과 excel 파일 다운로드
+                      </Box>
+                    )}
+                  </Box>
                 </Box>
               </Box>
             </CardContent>
@@ -429,7 +700,7 @@ const ReportManagementPage = () => {
                     </CardContent>
                   </Card>
                   
-                  {/* 막대 그래프 - 키워드별 평균 점수 */}
+                  {/* 레이더 차트 - 키워드별 평균 점수 */}
                   <Card
                     sx={{
                       flex: 1,
@@ -444,28 +715,31 @@ const ReportManagementPage = () => {
                       </Typography>
                       <Box sx={{ height: 200 }}>
                         <ResponsiveContainer width="100%" height="100%">
-                          <BarChart 
-                            data={keywordAverageData}
-                            margin={{ top: 20, right: 30, left: 20, bottom: 40 }}
-                          >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis 
+                          <RadarChart data={keywordRadarData}>
+                            <PolarGrid />
+                            <PolarAngleAxis 
                               dataKey="keyword" 
-                              tick={{ fontSize: 11 }}
-                              angle={-45}
-                              textAnchor="end"
-                              height={60}
+                              tick={{ fontSize: 12, fill: '#374151' }}
                             />
-                            <YAxis 
+                            <PolarRadiusAxis 
+                              angle={90}
                               domain={[0, 5]}
-                              tick={{ fontSize: 12 }}
+                              tick={{ fontSize: 10, fill: '#64748b' }}
+                              tickCount={6}
+                            />
+                            <Radar
+                              name="평균 점수"
+                              dataKey="average"
+                              stroke="#10b981"
+                              fill="#10b981"
+                              fillOpacity={0.3}
+                              strokeWidth={2}
                             />
                             <Tooltip 
                               formatter={(value) => [`${value}점`, '평균 점수']}
                               labelFormatter={(label) => `키워드: ${label}`}
                             />
-                            <Bar dataKey="average" fill="#10b981" />
-                          </BarChart>
+                          </RadarChart>
                         </ResponsiveContainer>
                       </Box>
                     </CardContent>
@@ -564,7 +838,7 @@ const ReportManagementPage = () => {
                           {interview.location}
                         </TableCell>
                         <TableCell>
-                          {getStatusChip(interview.status)}
+                          {getStatusChip(interview.status, interview.applicationNumber)}
                         </TableCell>
                         <TableCell sx={{ color: '#374151', fontWeight: 600 }}>
                           {interview.totalScore || '-'}
