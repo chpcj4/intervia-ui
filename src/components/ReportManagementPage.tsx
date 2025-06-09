@@ -27,7 +27,7 @@ interface InterviewData {
   interviewDate: string;
   interviewTime: string;
   location: string;
-  status: 'completed' | 'pending' | 'absent';  // 'absent' 추가
+  status: 'completed' | 'pending' | 'absent';
   totalScore: number | null;
   scores: {
     자발성: number | null;
@@ -172,13 +172,6 @@ const ReportManagementPage = () => {
       // API 호출 시뮬레이션
       console.log(`API 호출: 지원번호 ${applicationNumber}의 상태를 ${newStatus}로 변경`);
       
-      // 실제 API 호출 예시:
-      // const response = await fetch(`/api/interviews/${applicationNumber}/status`, {
-      //   method: 'PATCH',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ status: newStatus })
-      // });
-      
       // 상태 업데이트
       setInterviews(prev => prev.map(interview => 
         interview.applicationNumber === applicationNumber 
@@ -322,17 +315,30 @@ const ReportManagementPage = () => {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#f8fafc' }}>
+    <Box sx={{ 
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      width: '100vw',
+      height: '100vh',
+      bgcolor: '#f8fafc',
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'hidden'
+    }}>
       <TopNavBar />
       
-      <Box display="flex" height="calc(100vh - 64px)">
+      <Box display="flex" flex={1} sx={{ height: 'calc(100vh - 64px)', overflow: 'hidden' }}>
         {/* 좌측 사이드바 - 직군 목록 */}
         <Box
           sx={{
             width: 280,
             bgcolor: 'white',
             borderRight: '1px solid #e2e8f0',
-            p: 3
+            p: 3,
+            flexShrink: 0
           }}
         >
           <Typography variant="h6" fontWeight="700" color="#1e293b" mb={3}>
@@ -369,7 +375,15 @@ const ReportManagementPage = () => {
         </Box>
 
         {/* 메인 컨텐츠 영역 */}
-        <Box flex={1} sx={{ overflowY: "auto", bgcolor: '#f8fafc', p: 4 }}>
+        <Box 
+          flex={1} 
+          sx={{ 
+            overflowY: "auto", 
+            bgcolor: '#f8fafc', 
+            p: 4,
+            width: 0 // flex item이 최소 너비를 갖지 않도록 함
+          }}
+        >
           {/* 페이지 헤더 */}
           <Box mb={4}>
             <Typography 
@@ -400,7 +414,7 @@ const ReportManagementPage = () => {
               bgcolor: 'white',
               border: '1px solid #e2e8f0',
               overflow: 'visible',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)'  // 고정 시 그림자 추가
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
             }}
           >
             <CardContent sx={{ p: 3, overflow: 'visible' }}>
@@ -439,7 +453,7 @@ const ReportManagementPage = () => {
                       <Box
                         sx={{
                           position: 'absolute',
-                          top: 55,  // 버튼 아래쪽에 표시
+                          top: 55,
                           left: '50%',
                           transform: 'translateX(-50%)',
                           backgroundColor: '#1f2937',
@@ -451,7 +465,7 @@ const ReportManagementPage = () => {
                           whiteSpace: 'nowrap',
                           zIndex: 1000,
                           boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-                          '&::before': {  // 화살표를 위쪽으로
+                          '&::before': {
                             content: '""',
                             position: 'absolute',
                             bottom: '100%',
@@ -462,11 +476,6 @@ const ReportManagementPage = () => {
                             borderLeft: '5px solid transparent',
                             borderRight: '5px solid transparent',
                             borderBottom: '5px solid #1f2937'
-                          },
-                          animation: 'tooltipFadeIn 0.2s ease-out',
-                          '@keyframes tooltipFadeIn': {
-                            from: { opacity: 0, transform: 'translateX(-50%) translateY(-5px)' },
-                            to: { opacity: 1, transform: 'translateX(-50%) translateY(0)' }
                           }
                         }}
                       >
@@ -503,7 +512,7 @@ const ReportManagementPage = () => {
                       <Box
                         sx={{
                           position: 'absolute',
-                          top: 55,  // 버튼 아래쪽에 표시
+                          top: 55,
                           left: '50%',
                           transform: 'translateX(-50%)',
                           backgroundColor: '#1f2937',
@@ -515,7 +524,7 @@ const ReportManagementPage = () => {
                           whiteSpace: 'nowrap',
                           zIndex: 1000,
                           boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-                          '&::before': {  // 화살표를 위쪽으로
+                          '&::before': {
                             content: '""',
                             position: 'absolute',
                             bottom: '100%',
@@ -526,11 +535,6 @@ const ReportManagementPage = () => {
                             borderLeft: '5px solid transparent',
                             borderRight: '5px solid transparent',
                             borderBottom: '5px solid #1f2937'
-                          },
-                          animation: 'tooltipFadeIn 0.2s ease-out',
-                          '@keyframes tooltipFadeIn': {
-                            from: { opacity: 0, transform: 'translateX(-50%) translateY(-5px)' },
-                            to: { opacity: 1, transform: 'translateX(-50%) translateY(0)' }
                           }
                         }}
                       >
@@ -567,7 +571,7 @@ const ReportManagementPage = () => {
                       <Box
                         sx={{
                           position: 'absolute',
-                          top: 55,  // 버튼 아래쪽에 표시
+                          top: 55,
                           left: '50%',
                           transform: 'translateX(-50%)',
                           backgroundColor: '#1f2937',
@@ -579,7 +583,7 @@ const ReportManagementPage = () => {
                           whiteSpace: 'nowrap',
                           zIndex: 1000,
                           boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-                          '&::before': {  // 화살표를 위쪽으로
+                          '&::before': {
                             content: '""',
                             position: 'absolute',
                             bottom: '100%',
@@ -590,11 +594,6 @@ const ReportManagementPage = () => {
                             borderLeft: '5px solid transparent',
                             borderRight: '5px solid transparent',
                             borderBottom: '5px solid #1f2937'
-                          },
-                          animation: 'tooltipFadeIn 0.2s ease-out',
-                          '@keyframes tooltipFadeIn': {
-                            from: { opacity: 0, transform: 'translateX(-50%) translateY(-5px)' },
-                            to: { opacity: 1, transform: 'translateX(-50%) translateY(0)' }
                           }
                         }}
                       >

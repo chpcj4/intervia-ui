@@ -318,10 +318,22 @@ const AdminEvaluationPage = () => {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#f8fafc' }}>
+    <Box sx={{ 
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      width: '100vw',
+      height: '100vh',
+      bgcolor: '#f8fafc',
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'hidden'
+    }}>
       <TopNavBar />
       
-      <Box display="flex" height="calc(100vh - 64px)">
+      <Box display="flex" flex={1} sx={{ height: 'calc(100vh - 64px)', overflow: 'hidden' }}>
         {/* 사이드바 */}
         <Box
           sx={{
@@ -329,6 +341,7 @@ const AdminEvaluationPage = () => {
             bgcolor: 'white',
             borderRight: '1px solid #e2e8f0',
             boxShadow: '0 1px 3px 0 rgb(0 0 0 / 0.1)',
+            flexShrink: 0
           }}
         >
           <SideKeywordList 
@@ -346,7 +359,8 @@ const AdminEvaluationPage = () => {
           sx={{ 
             overflowY: "auto",
             bgcolor: '#f8fafc',
-            p: 4
+            p: 4,
+            width: 0 // flex item이 최소 너비를 갖지 않도록 함
           }}
         >
           {/* 페이지 헤더 */}

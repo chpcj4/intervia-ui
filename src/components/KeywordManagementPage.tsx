@@ -124,7 +124,7 @@ const KeywordManagementPage = () => {
   // 직군별 선택된 키워드들 관리: { 직군id: [키워드id 배열] }
   const [selectedKeywordsByJob, setSelectedKeywordsByJob] = useState<{[jobId: number]: number[]}>({
     1: [1, 3], // 개발 직군: 자발적, 높은 목표 추구
-    2: [2], // 디자인 직군: 의욕적
+    2: [2], // 디자인 직군: 의욱적
     3: [1, 2], // 기획 직군: 자발적, 의욕적
     4: [3] // 영업 직군: 높은 목표 추구
   });
@@ -313,10 +313,22 @@ const KeywordManagementPage = () => {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#f8fafc' }}>
+    <Box sx={{ 
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      width: '100vw',
+      height: '100vh',
+      bgcolor: '#f8fafc',
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'hidden'
+    }}>
       <TopNavBar />
       
-      <Box display="flex" height="calc(100vh - 64px)">
+      <Box display="flex" flex={1} sx={{ height: 'calc(100vh - 64px)', overflow: 'hidden' }}>
         {/* 좌측 사이드바 */}
         <Box
           sx={{
@@ -324,7 +336,8 @@ const KeywordManagementPage = () => {
             bgcolor: 'white',
             borderRight: '1px solid #e2e8f0',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            flexShrink: 0
           }}
         >
           {/* 직군 목록 */}
@@ -362,7 +375,7 @@ const KeywordManagementPage = () => {
           </Box>
 
           {/* 키워드 목록 */}
-          <Box sx={{ flex: 1, p: 3 }}>
+          <Box sx={{ flex: 1, p: 3, overflowY: 'auto' }}>
             <Typography variant="h6" fontWeight="700" color="#1e293b" mb={2}>
               키워드 목록
             </Typography>
@@ -424,13 +437,12 @@ const KeywordManagementPage = () => {
 
         {/* 메인 컨텐츠 영역 */}
         <Box 
-          ref={mainContentRef}
           flex={1} 
           sx={{ 
-            overflowY: "auto", 
-            bgcolor: '#f8fafc', 
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            overflow: 'hidden',
+            width: 0 // flex item이 최소 너비를 갖지 않도록 함
           }}
         >
           {/* 헤더 섹션 (고정) */}
@@ -442,7 +454,8 @@ const KeywordManagementPage = () => {
               bgcolor: '#f8fafc',
               pt: 4,
               px: 4,
-              pb: 2
+              pb: 2,
+              flexShrink: 0
             }}
           >
             <Card
@@ -498,7 +511,15 @@ const KeywordManagementPage = () => {
           </Box>
 
           {/* 키워드 상세 카드들 */}
-          <Box sx={{ px: 4, pb: 4 }}>
+          <Box 
+            ref={mainContentRef}
+            sx={{ 
+              flex: 1,
+              overflowY: 'auto',
+              px: 4, 
+              pb: 4
+            }}
+          >
             <Typography variant="h6" fontWeight="700" color="#334155" mb={3}>
               키워드 목록 ({keywords.length}개)
             </Typography>

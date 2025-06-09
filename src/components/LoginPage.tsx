@@ -24,13 +24,20 @@ const LoginPage = () => {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
-        width: "100%",
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: "100vw",
+        height: "100vh",
         backgroundColor: "#0052CC",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        padding: 2,
+        margin: 0,
+        padding: 0,
+        overflow: 'hidden', // 스크롤 방지
       }}
     >
       <Paper
@@ -38,6 +45,7 @@ const LoginPage = () => {
         sx={{
           width: "100%",
           maxWidth: 480,
+          mx: 2, // 좌우 여백
           p: 4,
           borderRadius: 3,
         }}

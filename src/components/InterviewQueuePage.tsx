@@ -88,10 +88,10 @@ const InterviewQueuePage = () => {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#f8fafc' }}>
+    <Box sx={{ minHeight: '100vh', bgcolor: '#f8fafc', width: '100vw', overflow: 'hidden' }}>
       <TopNavBar />
       
-      <Box display="flex" height="calc(100vh - 64px)" gap={2} p={3}>
+      <Box display="flex" height="calc(100vh - 64px)" sx={{ width: '100%' }}>
         {/* 사이드바 */}
         <InterviewSidebar
           isCollapsed={isSidebarCollapsed}
@@ -107,14 +107,13 @@ const InterviewQueuePage = () => {
 
         {/* 메인 컨텐츠 영역 */}
         <Box 
-          flex={1} 
+          flex={1}
           sx={{ 
             display: 'flex',
             flexDirection: 'column',
             gap: 6,
-            pl: 12.5,
-            pr: 12.5,
-            pt: 2.5
+            p: 3,
+            overflow: 'auto'
           }}
         >
           {/* 헤더 */}
@@ -128,7 +127,6 @@ const InterviewQueuePage = () => {
             >
               면접 대기
             </Typography>
-            <Divider sx={{ bgcolor: '#c3c4c3', height: 1, mb: 6 }} />
           </Box>
 
           {/* 지원자 검색 섹션 */}
@@ -152,7 +150,7 @@ const InterviewQueuePage = () => {
             </Typography>
             
             {/* 검색창과 시작하기 버튼 */}
-            <Box sx={{ display: 'flex', gap: 2.5, pr: 1.875 }}>
+            <Box sx={{ display: 'flex', gap: 2.5 }}>
               <TextField
                 fullWidth
                 variant="outlined"
@@ -203,7 +201,10 @@ const InterviewQueuePage = () => {
                   fontSize: '1rem',
                   fontWeight: 400,
                   textTransform: 'none',
-                  minWidth: 'auto',
+                  minWidth: 80,
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
                   '&:hover': {
                     bgcolor: '#0945a3'
                   }
@@ -346,12 +347,15 @@ const InterviewQueuePage = () => {
                               bgcolor: '#0b57d0',
                               color: 'white',
                               borderRadius: 4.5,
-                              px: 4,
+                              px: 3,
                               height: 36,
                               fontSize: '1rem',
                               fontWeight: 400,
                               textTransform: 'none',
-                              minWidth: 'auto',
+                              minWidth: 80,
+                              whiteSpace: 'nowrap',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
                               '&:hover': {
                                 bgcolor: '#0945a3'
                               }
