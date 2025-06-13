@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 
@@ -11,6 +10,7 @@ import InterviewQuestionListPage from './components/InterviewQuestionListPage';
 import InterviewAnalysisReportPage from './components/InterviewAnalysisReportPage';
 import KeywordManagementPage from './components/KeywordManagementPage';
 import ReportManagementPage from './components/ReportManagementPage';
+import QuickReviewPage from './components/QuickReviewPage'; // 새로 추가
 
 // Material-UI 테마 설정
 const theme = createTheme({
@@ -70,6 +70,9 @@ function App() {
           
           {/* 면접 분석 보고서 페이지 */}
           <Route path="/interview-report" element={<InterviewAnalysisReportPage />} />
+          
+          {/* Quick Review 페이지 - 새로 추가 */}
+          <Route path="/quick-review" element={<QuickReviewPage />} />
           
           {/* 관리자 페이지들 */}
           <Route path="/admin/evaluation" element={<AdminEvaluationPage />} />

@@ -238,6 +238,7 @@ const RadarChart = ({ data }: RadarChartProps) => {
     </Box>
   );
 };
+
 // 더미 면접자 데이터
 const interviewees: Interviewee[] = [
   {
@@ -274,47 +275,161 @@ const interviewees: Interviewee[] = [
   }
 ];
 
-// 더미 레이더 차트 데이터
-const radarChartData = [
-  { label: "전문성", value: 4.2, maxValue: 5 },
-  { label: "의사소통", value: 3.8, maxValue: 5 },
-  { label: "문제해결", value: 4.5, maxValue: 5 },
-  { label: "창의성", value: 3.6, maxValue: 5 },
-  { label: "리더십", value: 4.0, maxValue: 5 },
-  { label: "협업능력", value: 4.3, maxValue: 5 }
+// 키워드 평가 데이터를 기반으로 레이더 차트 데이터 생성하는 함수 (직접 매핑)
+const generateRadarDataFromKeywords = (keywordEvaluations: KeywordEvaluation[]) => {
+  return keywordEvaluations.map(evaluation => ({
+    label: evaluation.keyword,
+    value: parseScore(evaluation.score),
+    maxValue: 5
+  }));
+};
+
+// 키워드 평가 점수들의 총점과 만점 계산하는 함수
+const calculateTotalScoreFromKeywords = (keywordEvaluations: KeywordEvaluation[]): { score: number, maxScore: number } => {
+  const totalScore = keywordEvaluations.reduce((sum, evaluation) => {
+    return sum + parseScore(evaluation.score);
+  }, 0);
+  const maxScore = keywordEvaluations.length * 5;
+  
+  return {
+    score: Math.round(totalScore * 10) / 10, // 소수점 1자리까지
+    maxScore: maxScore
+  };
+};
+
+// 각 면접자별 키워드 평가 데이터
+const intervieweeKeywordEvaluations = [
+  // 강성우 (001)
+  [
+    {
+      keyword: "자발적",
+      score: "4.1/5",
+      reasoning: "프로젝트에서 능동적으로 문제를 찾아 해결하려는 모습을 보였으며, 추가적인 학습과 개선사항을 스스로 제안하는 등 자발적인 태도가 돋보였습니다."
+    },
+    {
+      keyword: "의욕적",
+      score: "3.6/5",
+      reasoning: "새로운 기술 습득에 대한 의지는 보였으나, 구체적인 실행 계획이나 열정적인 모습은 다소 아쉬웠습니다."
+    },
+    {
+      keyword: "높은 목표 추구",
+      score: "4.2/5",
+      reasoning: "현재 수준에 안주하지 않고 더 높은 기술적 성취를 위해 노력하는 모습을 보였으며, 장기적인 커리어 목표도 명확했습니다."
+    },
+    {
+      keyword: "Passionate",
+      score: "5.0/5",
+      reasoning: "개발에 대한 진정한 열정이 느껴졌으며, 기술적 도전에 대해 즐거워하고 몰입하는 모습이 인상적이었습니다."
+    },
+    {
+      keyword: "Professional",
+      score: "4.0/5",
+      reasoning: "업무에 대한 책임감과 전문성을 갖추고 있으나, 경험 부족으로 인한 일부 한계점도 보였습니다."
+    }
+  ],
+  // 김민채 (002)
+  [
+    {
+      keyword: "소통 지향적",
+      score: "4.1/5",
+      reasoning: "팀원들과의 원활한 소통을 중시하며, 의견 차이가 있을 때도 건설적인 대화를 통해 해결하려는 자세를 보였습니다."
+    },
+    {
+      keyword: "창의적 사고",
+      score: "4.2/5",
+      reasoning: "기존의 관습에 얽매이지 않고 새로운 관점에서 문제를 바라보는 능력이 뛰어나며, 독창적인 아이디어를 제시했습니다."
+    },
+    {
+      keyword: "적응력",
+      score: "3.9/5",
+      reasoning: "변화하는 상황에 빠르게 적응하는 모습을 보였으나, 급격한 변화에 대해서는 약간의 부담을 느끼는 것 같았습니다."
+    },
+    {
+      keyword: "Collaborative",
+      score: "4.0/5",
+      reasoning: "팀워크를 중시하고 다른 사람들과 잘 협력하는 능력을 갖추고 있으며, 갈등 상황에서도 조화를 추구합니다."
+    },
+    {
+      keyword: "Detail-oriented",
+      score: "3.7/5",
+      reasoning: "세부사항에 주의를 기울이는 편이지만, 때로는 큰 그림을 놓치는 경우도 있어 보였습니다."
+    }
+  ],
+  // 김민혁 (003)
+  [
+    {
+      keyword: "기술적 우수성",
+      score: "4.7/5",
+      reasoning: "깊이 있는 기술적 지식과 실무 경험을 바탕으로 복잡한 문제도 체계적으로 분석하고 해결하는 능력이 뛰어났습니다."
+    },
+    {
+      keyword: "문제 해결력",
+      score: "4.8/5",
+      reasoning: "논리적이고 체계적인 접근 방식으로 문제를 분석하며, 효과적인 해결책을 도출하는 능력이 탁월했습니다."
+    },
+    {
+      keyword: "학습 의지",
+      score: "4.3/5",
+      reasoning: "새로운 기술과 트렌드에 대한 지속적인 학습 의지를 보였으며, 자기 발전을 위한 노력이 돋보였습니다."
+    },
+    {
+      keyword: "Systematic",
+      score: "4.1/5",
+      reasoning: "업무를 체계적으로 접근하고 계획적으로 진행하는 모습을 보였으며, 효율성을 중시하는 태도가 인상적이었습니다."
+    },
+    {
+      keyword: "Innovative",
+      score: "3.9/5",
+      reasoning: "기술적 혁신에 대한 관심은 있으나, 실제 혁신적인 아이디어 제시는 다소 아쉬웠습니다."
+    }
+  ],
+  // 김상헌 (004)
+  [
+    {
+      keyword: "성장 가능성",
+      score: "4.1/5",
+      reasoning: "현재 수준은 다소 아쉽지만 지속적인 학습 의지와 개선하려는 노력이 보여 향후 성장 가능성이 높다고 판단됩니다."
+    },
+    {
+      keyword: "긍정적 마인드",
+      score: "3.9/5",
+      reasoning: "어려운 상황에서도 긍정적으로 접근하려는 자세를 보였으나, 때로는 현실적인 판단이 부족해 보였습니다."
+    },
+    {
+      keyword: "노력 의지",
+      score: "3.8/5",
+      reasoning: "목표 달성을 위해 노력하려는 의지는 있으나, 구체적인 실행 계획이나 지속성 측면에서 보완이 필요해 보입니다."
+    },
+    {
+      keyword: "Humble",
+      score: "3.7/5",
+      reasoning: "겸손한 자세로 피드백을 받아들이려 하지만, 자신감 부족으로 인해 적극성이 다소 아쉬웠습니다."
+    },
+    {
+      keyword: "Potential",
+      score: "3.8/5",
+      reasoning: "기본기는 갖추고 있으며 올바른 방향으로 발전할 수 있는 잠재력을 보유하고 있다고 평가됩니다."
+    }
+  ]
 ];
 
-// 더미 키워드 평가 데이터
-const keywordEvaluations: KeywordEvaluation[] = [
-  {
-    keyword: "자발적",
-    score: "4.1/5",
-    reasoning: "동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리 나라 만세. 무궁화 삼천리 화려강산. 대한사람 대한으로 길이 보전하세.동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리 나라 만세. 무궁화 삼천리 화려강산. 대한사람 대한으로 길이 보전하세."
-  },
-  {
-    keyword: "의욕적",
-    score: "3.6/5",
-    reasoning: "동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리 나라 만세. 무궁화 삼천리 화려강산. 대한사람 대한으로 길이 보전하세.동해물과 백두산이 마르고 닳도록 하느님이 보우하사"
-  },
-  {
-    keyword: "높은 목표 추구",
-    score: "4.2/5",
-    reasoning: "동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리 나라 만세. 무궁화 삼천리 화려강산. 대한사람 대한으로 길이 보전하세.동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리 나라 만세. 무궁화 삼천리 화려강산. 대한사람 대한으로 길이 보전하세.동해물과 백두산이 마르고 닳도록 하느님이 보우하사"
-  },
-  {
-    keyword: "Passionate",
-    score: "5.0/5",
-    reasoning: "동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리 나라 만세. 무궁화 삼천리 화려강산. 대한사람 대한으로 길이 보전하세.동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리 나라 만세. 무궁화 삼천리 화려강산. 대한사람 대한으로 길이 보전하세.동해물과 백두산이"
-  },
-  {
-    keyword: "Professional",
-    score: "4/5",
-    reasoning: "동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리 나라 만세. 무궁화 삼천리 화려강산. 대한사람 대한으로 길이 보전하세.동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리 나라 만세. 무궁화 삼천리 화려강산. 대한사람 대한으로 길이 보전하세.동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리 나라 만세. 무궁화 삼천리 화려강산. 대한사람 대한으로 길이 보전하세."
-  }
-];
+// 점수 문자열에서 숫자 추출하는 함수
+const parseScore = (scoreString: string): number => {
+  const match = scoreString.match(/(\d+\.?\d*)/);
+  return match ? parseFloat(match[1]) : 0;
+};
+
+// 총점 계산 함수 - 키워드 평가 기반으로 변경
+const calculateTotalScore = (keywordEvaluations: KeywordEvaluation[]) => {
+  return calculateTotalScoreFromKeywords(keywordEvaluations);
+};
 
 // 키워드 평가표 컴포넌트
-const KeywordEvaluationTable = () => {
+interface KeywordEvaluationTableProps {
+  evaluations: KeywordEvaluation[];
+}
+
+const KeywordEvaluationTable = ({ evaluations }: KeywordEvaluationTableProps) => {
   return (
     <Box sx={{ px: 4, py: 3 }}>
       <TableContainer>
@@ -366,11 +481,11 @@ const KeywordEvaluationTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {keywordEvaluations.map((evaluation, index) => (
+            {evaluations.map((evaluation, index) => (
               <TableRow 
                 key={index}
                 sx={{ 
-                  borderBottom: index === keywordEvaluations.length - 1 ? 'none' : '1px solid #f5f5f5',
+                  borderBottom: index === evaluations.length - 1 ? 'none' : '1px solid #f5f5f5',
                   '&:hover': {
                     bgcolor: '#fafbfc'
                   }
@@ -536,6 +651,9 @@ const InterviewAnalysisReportPage = () => {
   };
 
   const selectedInterviewee = interviewees[selectedIntervieweeIndex];
+  const selectedKeywordEvaluations = intervieweeKeywordEvaluations[selectedIntervieweeIndex];
+  const selectedRadarData = generateRadarDataFromKeywords(selectedKeywordEvaluations);
+  const scoreData = calculateTotalScore(selectedKeywordEvaluations);
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: '#f8fafc', width: '100vw', overflow: 'hidden' }}>
@@ -708,9 +826,9 @@ const InterviewAnalysisReportPage = () => {
                   justifyContent: 'center',
                   width: 330, // 220 * 1.5
                   borderRight: '1px solid #f0f0f0',
-                  bgcolor: '#fafbfc'
+                  bgcolor: 'white'
                 }}>
-                  <SemicircleScore score={83} maxScore={120} />
+                  <SemicircleScore score={scoreData.score} maxScore={scoreData.maxScore} />
                 </Box>
 
                 {/* 레이더 차트 */}
@@ -720,9 +838,9 @@ const InterviewAnalysisReportPage = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   minHeight: 300, // 높이 줄임
-                  bgcolor: '#fafbfc'
+                  bgcolor: 'white'
                 }}>
-                  <RadarChart data={radarChartData} />
+                  <RadarChart data={selectedRadarData} />
                 </Box>
               </Box>
             </Box>
@@ -741,7 +859,7 @@ const InterviewAnalysisReportPage = () => {
               }}
             >
               <CardContent sx={{ p: 0 }}>
-                <KeywordEvaluationTable />
+                <KeywordEvaluationTable evaluations={selectedKeywordEvaluations} />
               </CardContent>
             </Card>
           </Box>
