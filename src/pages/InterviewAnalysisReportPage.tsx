@@ -2,6 +2,7 @@ import { Box, Typography, Button, Card, CardContent, Table, TableBody, TableCell
 import TopNavBar from "../components/TopNavBarInterviewer"
 import InterviewSidebar from "../components/InterviewSidebar"
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // 면접자 데이터 타입
 interface Interviewee {
@@ -620,6 +621,7 @@ const ReportInfoPanel = ({ interviewee }: ReportInfoPanelProps) => {
 const InterviewAnalysisReportPage = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [selectedIntervieweeIndex, setSelectedIntervieweeIndex] = useState(0);
+  const navigate = useNavigate();
 
   const handleToggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
@@ -627,12 +629,12 @@ const InterviewAnalysisReportPage = () => {
 
   const handleNextInterview = () => {
     console.log("다음 면접 진행");
-    // 실제로는 다음 면접 진행 로직
+    navigate('/interview-queue');
   };
 
   const handleEndInterview = () => {
     console.log("면접 종료하기");
-    // 실제로는 면접 종료 로직
+    navigate('/interviewer');
   };
 
   const handleIntervieweeSelect = (index: number) => {
