@@ -1,6 +1,6 @@
 import { Box, Typography, Button, Card, CardContent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
-import TopNavBar from "./TopNavBar"
-import InterviewSidebar from "./InterviewSidebar"
+import TopNavBar from "../components/TopNavBar"
+import InterviewSidebar from "../components/InterviewSidebar"
 import { useState } from 'react';
 
 // 면접자 데이터 타입

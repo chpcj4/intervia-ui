@@ -2,15 +2,15 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 
 // 컴포넌트 imports
-import LoginPage from './components/LoginPage';
-import InterviewerViewPage from './components/InterviewerViewPage';
-import AdminEvaluationPage from './components/AdminEvaluationPage';
-import InterviewQueuePage from './components/InterviewQueuePage';
-import InterviewQuestionListPage from './components/InterviewQuestionListPage';
-import InterviewAnalysisReportPage from './components/InterviewAnalysisReportPage';
-import KeywordManagementPage from './components/KeywordManagementPage';
-import ReportManagementPage from './components/ReportManagementPage';
-import QuickReviewPage from './components/QuickReviewPage'; // 새로 추가
+import LoginPage from './pages/LoginPage';
+import InterviewerViewPage from './pages/InterviewerViewPage';
+import AdminEvaluationPage from './pages/AdminEvaluationPage';
+import InterviewQueuePage from './pages/InterviewQueuePage';
+import InterviewQuestionListPage from './pages/InterviewQuestionListPage';
+import InterviewAnalysisReportPage from './pages/InterviewAnalysisReportPage';
+import KeywordManagementPage from './pages/KeywordManagementPage';
+import ReportManagementPage from './pages/ReportManagementPage';
+import QuickReviewPage from './pages/QuickReviewPage'; // 새로 추가
 
 // Material-UI 테마 설정
 const theme = createTheme({

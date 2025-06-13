@@ -12,7 +12,7 @@ import {
   Menu as MenuIcon,
   Person as PersonIcon
 } from '@mui/icons-material';
-import TopNavBar from './TopNavBar';
+import TopNavBar from '../components/TopNavBar';
 
 // 질문 데이터 타입 정의
 interface Question {

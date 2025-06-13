@@ -2,8 +2,8 @@ import { Box, Typography, Button, Chip, Card, CardContent, IconButton } from "@m
 import AddIcon from '@mui/icons-material/Add';
 import SaveIcon from '@mui/icons-material/Save';
 import CloseIcon from '@mui/icons-material/Close';
-import TopNavBar from "./TopNavBar"
-import KeywordDetailCard from "./KeywordDetailCard"
+import TopNavBar from "../components/TopNavBar"
+import KeywordDetailCard from "../components/KeywordDetailCard"
 import { useState, useRef, useEffect } from 'react';
 
 // 직군 데이터 타입 정의

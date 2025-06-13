@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, Typography, Button, Avatar } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import InterviewSidebar from './InterviewSidebar';
+import InterviewSidebar from '../components/InterviewSidebar';
 
 // QA 데이터 타입 정의
 interface QAItem {

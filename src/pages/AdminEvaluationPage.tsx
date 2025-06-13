@@ -1,9 +1,9 @@
 import { Box, Typography, Button, TextField, CircularProgress, Chip, Card, CardContent, Fade } from "@mui/material"
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import AddIcon from '@mui/icons-material/Add';
-import TopNavBar from "./TopNavBar"
-import SideKeywordList from "./SideKeywordList"
-import KeywordDetailCard from "./KeywordDetailCard"
+import TopNavBar from "../components/TopNavBar"
+import SideKeywordList from "../components/SideKeywordList"
+import KeywordDetailCard from "../components/KeywordDetailCard"
 import { useState, useRef, useEffect } from 'react';
 
 const dummyKeywords = [

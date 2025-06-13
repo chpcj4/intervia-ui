@@ -1,7 +1,7 @@
 import { Box, Typography, Button, Card, CardContent, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, InputAdornment, Divider } from "@mui/material"
 import SearchIcon from '@mui/icons-material/Search';
-import TopNavBar from "./TopNavBar"
-import InterviewSidebar from "./InterviewSidebar"
+import TopNavBar from "../components/TopNavBar"
+import InterviewSidebar from "../components/InterviewSidebar"
 import { useState } from 'react';
 
 // 면접 데이터 타입 정의
