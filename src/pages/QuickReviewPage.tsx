@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Box, Typography, Button, Avatar } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Box, Typography, Button } from '@mui/material';
+import TopNavBar from '../components/TopNavBarInterviewer';
 import InterviewSidebar from '../components/InterviewSidebar';
 
 // QA 데이터 타입 정의
@@ -149,16 +148,6 @@ const QuickReviewPage = () => {
   const [selectedIntervieweeId, setSelectedIntervieweeId] = useState("001");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-  const [currentUser] = useState("김00");
-
-  const handleBack = () => {
-    console.log("뒤로 가기");
-    // window.history.back() 또는 navigate(-1) 사용
-  };
-
-  const handleLogout = () => {
-    console.log("로그아웃");
-  };
 
   const handleNextInterview = () => {
     console.log("다음 면접 진행");
@@ -203,106 +192,8 @@ const QuickReviewPage = () => {
       flexDirection: 'column',
       overflow: 'hidden'
     }}>
-      {/* Top Navigation Bar */}
-      <Box sx={{
-        bgcolor: 'white',
-        borderBottom: '1px solid #e2e8f0',
-        padding: '0 24px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        height: '64px',
-        width: '100%',
-        boxSizing: 'border-box'
-      }}>
-        {/* 좌측: 뒤로가기 + 로고 */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, padding: '0 6px' }}>
-            <Button
-              onClick={handleBack}
-              sx={{
-                color: 'white',
-                bgcolor: '#0b57d0',
-                width: 24,
-                height: 24,
-                borderRadius: 0.5,
-                minWidth: 'auto',
-                p: 0,
-                '&:hover': {
-                  bgcolor: '#0945a3'
-                }
-              }}
-            >
-              <ArrowBackIcon sx={{ fontSize: 16 }} />
-            </Button>
-          </Box>
-          
-          <Typography 
-            variant="h5" 
-            sx={{ 
-              fontWeight: 700, 
-              color: '#0b57d0',
-              letterSpacing: '-0.025em',
-              fontSize: '24px'
-            }}
-          >
-            INTERVIA
-          </Typography>
-        </Box>
-
-        {/* 우측: 사용자 영역 */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <Button 
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 0.5,
-              bgcolor: '#0b57d0',
-              color: 'white',
-              borderRadius: '18px',
-              padding: '5px 16px 5px 3px',
-              fontWeight: 700,
-              fontSize: '16px',
-              height: 30,
-              minWidth: 'auto',
-              textTransform: 'none',
-              '&:hover': {
-                bgcolor: '#0945a3'
-              }
-            }}
-          >
-            <Avatar 
-              sx={{ 
-                width: 24, 
-                height: 24,
-                bgcolor: '#e5e8ea'
-              }}
-            >
-              <AccountCircleIcon sx={{ fontSize: 16, color: '#c3c4c3' }} />
-            </Avatar>
-            {currentUser}
-          </Button>
-
-          <Button
-            onClick={handleLogout}
-            sx={{
-              color: '#d3e3fd',
-              bgcolor: 'transparent',
-              borderRadius: '18px',
-              padding: '5px 16px',
-              fontWeight: 700,
-              fontSize: '16px',
-              height: 30,
-              textTransform: 'none',
-              '&:hover': {
-                bgcolor: 'rgba(211, 227, 253, 0.1)'
-              }
-            }}
-          >
-            로그아웃
-          </Button>
-        </Box>
-      </Box>
+      {/* Top Navigation Bar - TopNavBarInterviewer 컴포넌트 사용 */}
+      <TopNavBar />
 
       {/* Content */}
       <Box sx={{ display: 'flex', flex: 1, height: 'calc(100vh - 64px)', overflow: 'hidden' }}>

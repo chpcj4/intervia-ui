@@ -4,15 +4,13 @@ import {
   Typography,
   Button,
   IconButton,
-  Paper,
-  Avatar
+  Paper
 } from '@mui/material';
 import {
-  Stop as StopIcon,
-  Menu as MenuIcon,
-  Person as PersonIcon
+  Stop as StopIcon
 } from '@mui/icons-material';
 import TopNavBar from '../components/TopNavBarInterviewer';
+import InterviewSidebar from '../components/InterviewSidebar';
 
 // 질문 데이터 타입 정의
 interface Question {
@@ -112,150 +110,6 @@ const currentInterviewees = [
   { id: "003", name: "김민혁" },
   { id: "004", name: "김상헌" }
 ];
-
-// 사이드바 컴포넌트
-interface SidebarProps {
-  isCollapsed: boolean;
-  onToggleCollapse: () => void;
-}
-
-const InterviewSidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggleCollapse }) => {
-  return (
-    <Box
-      sx={{
-        width: isCollapsed ? 60 : 280,
-        bgcolor: '#f8fafd',
-        borderRight: '1px solid #e2e8f0',
-        flexShrink: 0,
-        transition: 'width 0.3s ease',
-        overflow: 'hidden'
-      }}
-    >
-      {/* 메뉴 토글 버튼 */}
-      <Box sx={{ p: 1.25, borderBottom: '1px solid #e2e8f0' }}>
-        <IconButton onClick={onToggleCollapse} sx={{ p: 0 }}>
-          <MenuIcon />
-        </IconButton>
-      </Box>
-
-      {!isCollapsed && (
-        <Box sx={{ p: 1.25, display: 'flex', flexDirection: 'column', gap: 1 }}>
-          {/* 면접일 */}
-          <Paper sx={{ bgcolor: '#f2f6fc', borderRadius: 1.5, p: 1.5 }} elevation={0}>
-            <Typography variant="body2" sx={{ fontWeight: 700, color: '#0b57d0', mb: 0.75 }}>
-              면접일
-            </Typography>
-            <Typography variant="body2" sx={{ fontWeight: 700, color: '#000' }}>
-              2025-06-02
-            </Typography>
-          </Paper>
-
-          {/* 면접호실 */}
-          <Paper sx={{ bgcolor: '#f2f6fc', borderRadius: 1.5, p: 1.5 }} elevation={0}>
-            <Typography variant="body2" sx={{ fontWeight: 700, color: '#0b57d0', mb: 0.75 }}>
-              면접호실
-            </Typography>
-            <Typography variant="body2" sx={{ fontWeight: 700, color: '#000' }}>
-              801호
-            </Typography>
-          </Paper>
-
-          {/* 면접관 */}
-          <Paper sx={{ bgcolor: '#f2f6fc', borderRadius: 1.5, p: 1.5 }} elevation={0}>
-            <Typography variant="body2" sx={{ fontWeight: 700, color: '#0b57d0', mb: 0.75 }}>
-              면접관
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-              {['김00', '이00', '박00'].map((name, index) => (
-                <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-                  <Avatar sx={{ width: 22, height: 22, bgcolor: '#e5e8ea' }}>
-                    <PersonIcon sx={{ fontSize: 14, color: '#c3c4c3' }} />
-                  </Avatar>
-                  <Typography variant="body2" sx={{ fontWeight: 700, color: '#000' }}>
-                    {name}
-                  </Typography>
-                </Box>
-              ))}
-            </Box>
-          </Paper>
-
-          {/* 진행률 */}
-          <Paper sx={{ bgcolor: '#f2f6fc', borderRadius: 1.5, p: 1.5 }} elevation={0}>
-            <Typography variant="body2" sx={{ fontWeight: 700, color: '#0b57d0', mb: 1.5 }}>
-              진행률
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-                  <Box sx={{ 
-                    width: 20, 
-                    height: 20, 
-                    borderRadius: '50%', 
-                    bgcolor: '#d3e3fd',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
-                    <Typography variant="caption" sx={{ fontWeight: 700, fontSize: '10px' }}>
-                      30
-                    </Typography>
-                  </Box>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-                  <Box sx={{ 
-                    width: 20, 
-                    height: 20, 
-                    borderRadius: '50%', 
-                    bgcolor: '#83f390',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
-                    <Typography variant="caption" sx={{ fontWeight: 700, fontSize: '10px' }}>
-                      13
-                    </Typography>
-                  </Box>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-                  <Box sx={{ 
-                    width: 20, 
-                    height: 20, 
-                    borderRadius: '50%', 
-                    bgcolor: '#e5e8ea',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
-                    <Typography variant="caption" sx={{ fontWeight: 700, fontSize: '10px' }}>
-                      17
-                    </Typography>
-                  </Box>
-                </Box>
-              </Box>
-              <Box sx={{ 
-                width: 120, 
-                height: 120, 
-                borderRadius: '50%',
-                background: 'conic-gradient(#83f390 0deg 156deg, #e5e8ea 156deg 360deg)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <Typography variant="body2" sx={{ fontWeight: 700, color: '#000' }}>
-                  진행률
-                </Typography>
-                <Typography variant="h6" sx={{ fontWeight: 700, color: '#000' }}>
-                  43.3%
-                </Typography>
-              </Box>
-            </Box>
-          </Paper>
-        </Box>
-      )}
-    </Box>
-  );
-};
 
 // 질문 항목 컴포넌트
 interface QuestionItemProps {
@@ -405,6 +259,17 @@ const InterviewQuestionListPage: React.FC = () => {
     item => item.id === selectedIntervieweeId
   );
 
+  // 사이드바 데이터
+  const sidebarData = {
+    interviewDate: "2025-06-02",
+    interviewRoom: "801호",
+    interviewers: ["김00", "이00", "박00"],
+    totalCount: 30,
+    completedCount: 13,
+    remainingCount: 17,
+    progressPercentage: 43.3
+  };
+
   return (
     <Box sx={{ 
       position: 'fixed',
@@ -422,9 +287,17 @@ const InterviewQuestionListPage: React.FC = () => {
       <TopNavBar />
       
       <Box display="flex" flex={1} sx={{ height: 'calc(100vh - 64px)', overflow: 'hidden' }}>
-        <InterviewSidebar 
-          isCollapsed={isSidebarCollapsed} 
-          onToggleCollapse={handleToggleSidebar} 
+        {/* 사이드바 - 공통 InterviewSidebar 컴포넌트 사용 */}
+        <InterviewSidebar
+          isCollapsed={isSidebarCollapsed}
+          onToggleCollapse={handleToggleSidebar}
+          interviewDate={sidebarData.interviewDate}
+          interviewRoom={sidebarData.interviewRoom}
+          interviewers={sidebarData.interviewers}
+          totalCount={sidebarData.totalCount}
+          completedCount={sidebarData.completedCount}
+          remainingCount={sidebarData.remainingCount}
+          progressPercentage={sidebarData.progressPercentage}
         />
 
         {/* 메인 컨텐츠 영역 */}

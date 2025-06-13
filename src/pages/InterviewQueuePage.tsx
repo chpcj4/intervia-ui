@@ -4,6 +4,7 @@ import TopNavBar from "../components/TopNavBarInterviewer"
 import InterviewSidebar from "../components/InterviewSidebar"
 import InterviewQueueRow from "../components/InterviewQueueRow"
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // useNavigate 추가
 
 // 면접 데이터 타입 정의
 interface InterviewData {
@@ -60,6 +61,7 @@ const InterviewQueuePage = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [interviews, setInterviews] = useState<InterviewData[]>(dummyInterviewData);
+  const navigate = useNavigate(); // useNavigate 훅 추가
 
   const handleToggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
@@ -71,12 +73,14 @@ const InterviewQueuePage = () => {
 
   const handleStartInterview = (applicationNumber: string) => {
     console.log(`면접 시작: ${applicationNumber}`);
-    // 실제로는 면접 시작 로직
+    // InterviewQuestionListPage로 이동
+    navigate('/interview-questions');
   };
 
   const handleStartSearch = () => {
     console.log(`검색 시작: ${searchTerm}`);
-    // 실제로는 검색 로직
+    // 면접 질문 페이지로 이동
+    navigate('/interview-questions');
   };
 
   // 사이드바 데이터
