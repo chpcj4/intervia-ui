@@ -1,10 +1,10 @@
-import { Box, Typography, Button, Card, CardContent, Avatar, CircularProgress } from "@mui/material"
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import LogoutIcon from '@mui/icons-material/Logout';
+import { Box, Typography, Button, Card, CardContent, CircularProgress } from "@mui/material"
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import TopNavBar from '../components/TopNavBarInterviewer'; // TopNavBarInterviewer import 추가
 
 // API 응답 타입 정의
 interface Interviewer {
@@ -58,7 +58,7 @@ const dummyApiResponse: ApiResponse = {
 
 const InterviewerViewPage = () => {
   const [apiData, setApiData] = useState<ApiResponse | null>(null);
-  const [currentUser, setCurrentUser] = useState<string>("김00");
+  const navigate = useNavigate(); // useNavigate 훅 추가
 
   // API 데이터 로드 시뮬레이션
   useEffect(() => {
@@ -74,12 +74,8 @@ const InterviewerViewPage = () => {
 
   const handleStartInterview = (roomIndex: number) => {
     console.log(`면접 시작 - Room ${roomIndex + 1}`);
-    // 실제로는 면접 시작 로직
-  };
-
-  const handleLogout = () => {
-    console.log("로그아웃");
-    // 실제로는 로그아웃 로직
+    // 면접 대기 페이지로 이동
+    navigate('/interview-queue');
   };
 
   // 진행률 계산
@@ -120,93 +116,7 @@ const InterviewerViewPage = () => {
       overflow: 'hidden'
     }}>
       {/* Top Navigation Bar */}
-      <Box
-        sx={{
-          bgcolor: 'white',
-          borderBottom: '1px solid #e2e8f0',
-          px: 3,
-          py: 2,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          height: 64,
-          width: '100%',
-          boxSizing: 'border-box'
-        }}
-      >
-        {/* 좌측 로고 */}
-        <Box display="flex" alignItems="center" gap={2}>
-          <Typography 
-            variant="h5" 
-            fontWeight="700" 
-            sx={{
-              color: '#0b57d0',
-              letterSpacing: '-0.025em',
-              fontSize: '1.5rem'
-            }}
-          >
-            INTERVIA
-          </Typography>
-        </Box>
-
-        {/* 우측 사용자 영역 */}
-        <Box display="flex" alignItems="center" gap={2}>
-          {/* Admin 태그 */}
-          <Button
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1,
-              bgcolor: '#0b57d0',
-              color: 'white',
-              borderRadius: '18px',
-              px: 1,
-              py: 0.5,
-              textTransform: 'none',
-              fontWeight: 700,
-              fontSize: '1rem',
-              height: 30,
-              minWidth: 'auto',
-              '&:hover': {
-                bgcolor: '#0945a3'
-              }
-            }}
-          >
-            <Avatar 
-              sx={{ 
-                width: 24, 
-                height: 24,
-                bgcolor: '#e5e8ea',
-                fontSize: '0.75rem',
-                fontWeight: 600
-              }}
-            >
-              <AccountCircleIcon sx={{ color: '#c3c4c3', fontSize: '1rem' }} />
-            </Avatar>
-            {currentUser}
-          </Button>
-
-          <Button
-            onClick={handleLogout}
-            sx={{
-              color: '#9fa1a0',
-              borderRadius: '18px',
-              px: 2,
-              py: 0.5,
-              textTransform: 'none',
-              fontWeight: 700,
-              fontSize: '1rem',
-              height: 30,
-              '&:hover': {
-                bgcolor: '#f1f5f9',
-                color: '#374151'
-              }
-            }}
-          >
-            로그아웃
-          </Button>
-        </Box>
-      </Box>
+      <TopNavBar />
 
       {/* Main Content */}
       <Box sx={{ 
@@ -251,7 +161,7 @@ const InterviewerViewPage = () => {
                   mb={3.75}
                   sx={{ fontSize: { xs: '1.8rem', sm: '2.25rem' } }}
                 >
-                  {currentUser} 면접관님, 안녕하세요.
+                  김00 면접관님, 안녕하세요.
                 </Typography>
                 <Typography 
                   variant="h5" 

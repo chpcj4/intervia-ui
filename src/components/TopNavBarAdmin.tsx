@@ -36,6 +36,12 @@ const TopNavBar = () => {
     navigate('/admin/reports');
   };
 
+  // 로그아웃 핸들러 수정
+  const handleLogout = () => {
+    console.log("로그아웃");
+    navigate('/login');
+  };
+
   // 현재 경로에 따른 활성 상태 확인 함수
   const isActive = (path: string) => {
     return location.pathname === path;
@@ -221,6 +227,7 @@ const TopNavBar = () => {
           </Button>
 
           <Button
+            onClick={handleLogout}
             sx={{
               color: '#9fa1a0',
               borderRadius: '18px',

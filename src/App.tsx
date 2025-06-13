@@ -7,7 +7,7 @@ import InterviewerViewPage from './pages/InterviewerViewPage';
 import AdminEvaluationPage from './pages/AdminEvaluationPage';
 import InterviewQueuePage from './pages/InterviewQueuePage';
 import InterviewQuestionListPage from './pages/InterviewQuestionListPage';
-import InterviewAnalysisReportPage from './pages/InterviewAnalysisReportPage';
+import InterviewReportPage from './pages/InterviewReportPage';
 import KeywordManagementPage from './pages/KeywordManagementPage';
 import ReportManagementPage from './pages/ReportManagementPage';
 import QuickReviewPage from './pages/QuickReviewPage'; // 새로 추가
@@ -69,7 +69,7 @@ function App() {
           <Route path="/interview-questions" element={<InterviewQuestionListPage />} />
           
           {/* 면접 분석 보고서 페이지 */}
-          <Route path="/interview-report" element={<InterviewAnalysisReportPage />} />
+          <Route path="/interview-report" element={<InterviewReportPage />} />
           
           {/* Quick Review 페이지 - 새로 추가 */}
           <Route path="/quick-review" element={<QuickReviewPage />} />

@@ -9,6 +9,7 @@ import {
 import {
   Stop as StopIcon
 } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom'; // useNavigate import 추가
 import TopNavBar from '../components/TopNavBarInterviewer';
 import InterviewSidebar from '../components/InterviewSidebar';
 
@@ -240,6 +241,7 @@ const QAItemComponent: React.FC<QAItemComponentProps> = ({ qa }) => {
 const InterviewQuestionListPage: React.FC = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [selectedIntervieweeId, setSelectedIntervieweeId] = useState("001");
+  const navigate = useNavigate(); // useNavigate 훅 추가
 
   const handleToggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
@@ -247,7 +249,8 @@ const InterviewQuestionListPage: React.FC = () => {
 
   const handleStopRecording = () => {
     console.log("녹음 종료");
-    alert("녹음이 종료되었습니다.");
+    // InterviewReportPage로 이동
+    navigate('/interview-report');
   };
 
   const handleIntervieweeSelect = (intervieweeId: string) => {
