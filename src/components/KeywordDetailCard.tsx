@@ -244,8 +244,10 @@ const KeywordDetailCard = forwardRef<HTMLDivElement, KeywordDetailCardProps>(({
                       <Chip
                         label={`${criterion.keyword_score}점`}
                         sx={{
-                          bgcolor: criterion.keyword_score >= 4 ? '#10b981' : 
-                                   criterion.keyword_score >= 3 ? '#f59e0b' : '#ef4444',
+                          bgcolor: criterion.keyword_score === 5 ? '#10b981' : 
+                                   criterion.keyword_score === 4 ? '#84cc16' : 
+                                   criterion.keyword_score === 3 ? '#f59e0b' : 
+                                   criterion.keyword_score === 2 ? '#ea580c' : '#ef4444',
                           color: 'white',
                           fontWeight: 700,
                           fontSize: '0.875rem'

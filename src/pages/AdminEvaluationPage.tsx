@@ -1,7 +1,7 @@
 import { Box, Typography, Button, TextField, CircularProgress, Chip, Card, CardContent, Fade } from "@mui/material"
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import AddIcon from '@mui/icons-material/Add';
-import TopNavBar from "../components/TopNavBar"
+import TopNavBar from "../components/TopNavBarAdmin"
 import SideKeywordList from "../components/SideKeywordList"
 import KeywordDetailCard from "../components/KeywordDetailCard"
 import { useState, useRef, useEffect } from 'react';

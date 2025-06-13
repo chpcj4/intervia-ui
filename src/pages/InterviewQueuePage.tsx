@@ -1,6 +1,6 @@
 import { Box, Typography, Button, Card, CardContent, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, InputAdornment, Divider } from "@mui/material"
 import SearchIcon from '@mui/icons-material/Search';
-import TopNavBar from "../components/TopNavBar"
+import TopNavBar from "../components/TopNavBarInterviewer"
 import InterviewSidebar from "../components/InterviewSidebar"
 import { useState } from 'react';
 

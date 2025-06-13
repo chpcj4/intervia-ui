@@ -10,7 +10,8 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from "recharts"
-import TopNavBar from "../components/TopNavBar"
+import * as XLSX from 'xlsx';
+import TopNavBar from "../components/TopNavBarAdmin"
 import { useState } from 'react';
 
 // 직군 데이터 타입 정의
@@ -142,8 +143,127 @@ const ReportManagementPage = () => {
     console.log("면접결과 요약 PDF 생성 및 다운로드");
   };
 
+  // Excel 다운로드 함수
   const handleExcelDownload = () => {
-    console.log("면접 결과 Excel 파일 다운로드");
+    try {
+      // 현재 선택된 직군 이름 가져오기
+      const selectedJobName = dummyJobCategories.find(cat => cat.id === selectedJobCategory)?.name || '전체';
+      
+      // 상태를 한글로 변환하는 함수
+      const getStatusText = (status: 'completed' | 'pending' | 'absent') => {
+        switch (status) {
+          case 'completed': return '진행 완료';
+          case 'pending': return '진행 전';
+          case 'absent': return '불참';
+          default: return status;
+        }
+      };
+
+      // Excel 데이터 형식으로 변환
+      const excelData = interviews.map((interview) => ({
+        '지원번호': interview.applicationNumber,
+        '이름': interview.name,
+        '면접관': interview.interviewers,
+        '면접일자': interview.interviewDate,
+        '면접시간': interview.interviewTime,
+        '면접장소': interview.location,
+        '진행상태': getStatusText(interview.status),
+        '총점': interview.totalScore ?? '-',
+        '자발성': interview.scores.자발성 ?? '-',
+        '높은목표': interview.scores.높은목표 ?? '-',
+        '의욕적': interview.scores.의욕적 ?? '-',
+        '협업': interview.scores.협업 ?? '-',
+        '전문성': interview.scores.전문성 ?? '-'
+      }));
+
+      // 워크북 생성
+      const wb = XLSX.utils.book_new();
+      
+      // 워크시트 생성
+      const ws = XLSX.utils.json_to_sheet(excelData);
+
+      // 컬럼 너비 설정
+      const columnWidths = [
+        { wch: 10 }, // 지원번호
+        { wch: 15 }, // 이름
+        { wch: 20 }, // 면접관
+        { wch: 12 }, // 면접일자
+        { wch: 10 }, // 면접시간
+        { wch: 10 }, // 면접장소
+        { wch: 12 }, // 진행상태
+        { wch: 8 },  // 총점
+        { wch: 8 },  // 자발성
+        { wch: 10 }, // 높은목표
+        { wch: 8 },  // 의욕적
+        { wch: 8 },  // 협업
+        { wch: 8 }   // 전문성
+      ];
+      ws['!cols'] = columnWidths;
+
+      // 헤더 스타일 설정
+      const headerCells = ['A1', 'B1', 'C1', 'D1', 'E1', 'F1', 'G1', 'H1', 'I1', 'J1', 'K1', 'L1', 'M1'];
+      headerCells.forEach(cell => {
+        if (ws[cell]) {
+          ws[cell].s = {
+            font: { bold: true, color: { rgb: "FFFFFF" } },
+            fill: { fgColor: { rgb: "0B57D0" } },
+            alignment: { horizontal: "center", vertical: "center" }
+          };
+        }
+      });
+
+      // 워크시트를 워크북에 추가
+      XLSX.utils.book_append_sheet(wb, ws, `${selectedJobName}_면접결과`);
+
+      // 통계 시트 추가
+      const statsData = [
+        { '구분': '전체 면접자 수', '값': interviews.length },
+        { '구분': '진행 완료', '값': interviews.filter(i => i.status === 'completed').length },
+        { '구분': '진행 전', '값': interviews.filter(i => i.status === 'pending').length },
+        { '구분': '불참', '값': interviews.filter(i => i.status === 'absent').length },
+        { '구분': '', '값': '' },
+        { '구분': '평균 총점', '값': interviews
+          .filter(i => i.totalScore !== null)
+          .reduce((sum, i) => sum + (i.totalScore || 0), 0) / 
+          interviews.filter(i => i.totalScore !== null).length || 0 },
+        { '구분': '최고 점수', '값': Math.max(...interviews.map(i => i.totalScore || 0)) },
+        { '구분': '최저 점수', '값': Math.min(...interviews.filter(i => i.totalScore !== null).map(i => i.totalScore || 0)) }
+      ];
+
+      const statsWs = XLSX.utils.json_to_sheet(statsData);
+      statsWs['!cols'] = [{ wch: 15 }, { wch: 10 }];
+      
+      // 통계 시트 헤더 스타일
+      if (statsWs['A1']) {
+        statsWs['A1'].s = {
+          font: { bold: true, color: { rgb: "FFFFFF" } },
+          fill: { fgColor: { rgb: "10B981" } },
+          alignment: { horizontal: "center" }
+        };
+      }
+      if (statsWs['B1']) {
+        statsWs['B1'].s = {
+          font: { bold: true, color: { rgb: "FFFFFF" } },
+          fill: { fgColor: { rgb: "10B981" } },
+          alignment: { horizontal: "center" }
+        };
+      }
+
+      XLSX.utils.book_append_sheet(wb, statsWs, '통계');
+
+      // 파일명 생성 (현재 날짜 포함)
+      const currentDate = new Date().toISOString().split('T')[0];
+      const fileName = `${selectedJobName}_면접결과_${currentDate}.xlsx`;
+
+      // 파일 다운로드
+      XLSX.writeFile(wb, fileName);
+
+      console.log(`Excel 파일 다운로드 완료: ${fileName}`);
+      
+    } catch (error) {
+      console.error('Excel 파일 생성 중 오류:', error);
+      alert('Excel 파일 생성 중 오류가 발생했습니다. 다시 시도해주세요.');
+    }
   };
 
   const handlePdfDownload = (applicationNumber: string) => {

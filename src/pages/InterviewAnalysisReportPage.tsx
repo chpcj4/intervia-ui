@@ -1,5 +1,5 @@
 import { Box, Typography, Button, Card, CardContent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
-import TopNavBar from "../components/TopNavBar"
+import TopNavBar from "../components/TopNavBarInterviewer"
 import InterviewSidebar from "../components/InterviewSidebar"
 import { useState } from 'react';
 
